@@ -1,0 +1,12 @@
+services:
+    boardtools.cronstatus.listener:
+        class: boardtools\cronstatus\event\listener
+        arguments:
+            - @config
+            - @controller.helper
+            - @user
+            - @template
+            - @dbal.conn
+            - @cron.manager
+        tags:
+            - { name: event.listener }
