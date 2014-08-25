@@ -7,6 +7,16 @@
 *
 */
 
+/* NOTE: This file will be removed in the final release. */
+
+/**
+* @ignore
+*/
+if(!defined('IN_PHPBB'))
+{
+	exit;
+}
+
 /**
 * Inserts new config display_vars into an exisiting display_vars array
 * at the given position.

@@ -26,33 +26,32 @@ class listener implements EventSubscriberInterface
 	protected $db;
 	protected $cron_manager;
 
-    /**
-    * Constructor
-    *
-    * @param \phpbb\controller\helper    $helper        Controller helper object
-    */
-    public function __construct(\phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\user $user, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\cron\manager $cron_manager)
-    {
-        $this->config = $config;
+	/**
+	* Constructor
+	*
+	* @param \phpbb\controller\helper    $helper        Controller helper object
+	*/
+	public function __construct(\phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\user $user, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\cron\manager $cron_manager)
+	{
+		$this->config = $config;
 		$this->helper = $helper;
 		$this->user = $user;
 		$this->template = $template;
 		$this->db = $db;
 		$this->cron_manager = $cron_manager;
-    }
+	}
 
-    static public function getSubscribedEvents()
-    {
-        return array(
+	static public function getSubscribedEvents()
+	{
+		return array(
 			'core.user_setup'					=> 'load_language_on_setup',
 			'core.acp_main_notice'				=> 'load_cronstatus',
 			'core.acp_board_config_edit_add'	=> 'add_config',
 		);
-    }
+	}
 
 	public function load_cronstatus($event)
 	{
-
 		$tasks = $this->cron_manager->get_tasks();
 
 		if (empty($tasks) || !$this->config['cron_lock'] || !$this->config['cronstatus_main_notice'])
@@ -77,13 +76,19 @@ class listener implements EventSubscriberInterface
 	}
 
 	// array_search with partial matches
-	public function array_find($needle, $haystack) 
+	public function array_find($needle, $haystack)
 	{
-		if(!is_array($haystack)) return false;
-		foreach ($haystack as $item) 
+		if(!is_array($haystack))
+		{
+			return false;
+		}
+		foreach ($haystack as $item)
 		{
 			$name = $item->get_name();
-			if (strpos($name, $needle) !== false) return $name;
+			if (strpos($name, $needle) !== false)
+			{
+				return $name;
+			}
 		}
 		return false;
 	}
