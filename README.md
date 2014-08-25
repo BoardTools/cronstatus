@@ -1,20 +1,32 @@
 Cron Status
 ===========
-
 Cron Status displays an overview of Board's Cron Jobs in Maintenance module of ACP. This extension also shows a notification on the main page of ACP when a cron job is locked (optionally). It shows the time when the cron task started and which cron task was the problem.
+
+[![Build Status](https://travis-ci.org/BoardTools/cronstatus.svg?branch=master)](https://travis-ci.org/BoardTools/cronstatus)
 
 ## Requirements
 * phpBB 3.1.0-dev or higher (phpBB 3.1.0-RC3 or higher for Cron Status Notice on ACP index)
 * PHP 5.3.3 or higher
 
-## Installation
+## Quick Installation
+You can quickly install this extension (without using FTP) on the latest copy of the develop branch ([phpBB 3.1-dev](https://github.com/phpbb/phpbb3)) by doing the following:
+
+1. Make sure that the extension "[Upload Extensions](https://github.com/BoardTools/upload)" is installed on your board.
+2. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
+3. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Upload extensions`.
+4. Choose the downloaded ZIP-archive in the `Browse` field and click `Upload`.
+5. Click `Enable`.
+
+## Standard Installation
 You can install this extension on the latest copy of the develop branch ([phpBB 3.1-dev](https://github.com/phpbb/phpbb3)) by doing the following:
 
-1. Copy the [entire contents of this repo](https://github.com/BoardTools/cronstatus/archive/master.zip) to `FORUM_DIRECTORY/ext/boardtools/cronstatus/`.
-2. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions`.
-3. Click Cron Status => `Enable`.
+1. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
+2. Check out the existing of the folder `/ext/boardtools/cronstatus/` in the root of your board folder. Create folders if necessary.
+3. Copy the contents of the downloaded `cronstatus-master` folder to `/ext/boardtools/cronstatus/`.
+4. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Cron Status`.
+5. Click `Enable`.
 
-Note: This extension is in development. Installation is only recommended for testing purposes and is not supported on live boards. This extension will be officially released following phpBB 3.1.0. Extension depends on two core changes.
+Note: This extension is in development. Installation is only recommended for testing purposes and is not supported on live boards. This extension will be officially released following phpBB 3.1.0.
 
 ## Usage
 ### Cron Status page
@@ -30,15 +42,15 @@ Navigate in the ACP to `General -> Board configuration -> Board settings -> Cron
 
 ## Update
 1. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
-2. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions` and click Cron Status => `Disable`.
-3. Copy the contents of `cronstatus-master` folder to `FORUM_DIRECTORY/ext/boardtools/cronstatus/`.
-4. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions` and click Cron Status => `Enable`.
+2. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Cron Status` and click `Disable`.
+3. Copy the contents of the downloaded `cronstatus-master` folder to `/ext/boardtools/cronstatus/`.
+4. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Cron Status` and click `Enable`.
 5. Click `Details` or `Re-Check all versions` link to follow updates.
 
 ## Uninstallation
-Navigate in the ACP to `Customise -> Extension Management -> Manage extensions` and click Cron Status => `Disable`.
+Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Cron Status` and click `Disable`.
 
-To permanently uninstall, click `Delete Data` and then you can safely delete the `/ext/boardtools/cronstatus/` folder.
+For permanent uninstallation click `Delete Data` and then you can safely delete the `/ext/boardtools/cronstatus/` folder.
 
 ## License
 [GNU General Public License v2](http://opensource.org/licenses/GPL-2.0)
