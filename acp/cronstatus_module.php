@@ -282,7 +282,10 @@ class cronstatus_module
 		}
 		foreach ($haystack as $key => $item)
 		{
-			if (strpos($item['config_name'], $needle) !== false) return $haystack[$key]['config_value'];
+			if (strpos($item['config_name'], $needle) !== false)
+			{
+				return $haystack[$key]['config_value'];
+			}
 		}
 		return false;
 	}

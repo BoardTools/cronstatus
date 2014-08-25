@@ -107,7 +107,10 @@ class listener implements EventSubscriberInterface
 				'cronstatus_main_notice'	=> array('lang' => 'CRON_STATUS_MAIN_NOTICE',	'validate' => 'bool',	'type' => 'radio:yes_no', 'explain' => true),
 				'legend'.($submit_legend_number + 1)	=> 'ACP_SUBMIT_CHANGES',
 			);
-			if(!function_exists("insert_config_array")) include("compatibility.php");
+			if(!function_exists("insert_config_array"))
+			{
+				include("compatibility.php");
+			}
 			$display_vars['vars'] = insert_config_array($display_vars['vars'], $new_vars, array('after' => $submit_key));
 			$event['display_vars'] = $display_vars;
 		}
