@@ -1,39 +1,39 @@
 {
-	"name": "boardtools/cronstatus",
-	"type": "phpbb-extension",
-	"description": "Cron Status displays an overview of Board's Cron Jobs in Maintenance module of ACP. This extension also shows a notification on the main page of ACP when a cron job is locked (optionally). It shows the time when the cron task started and which cron task was the problem.",
-	"homepage": "http://forumhulp.com",
-	"version": "3.1.0-RC3",
-	"keywords": ["boardtools", "forumhulp", "phpbb", "extension", "cron", "status"],
-	"license": "GPL-2.0",
-	"authors": [
-		{
-			"name": "John Peskens",
-			"email": "info@forumhulp.com",
-			"role": "Developer"
-		},
-		{
-			"name": "Igor Lavrov",
-			"homepage": "https://github.com/lavigor",
-			"role": "Developer"
-		}
-	],
-	"require": {
-		"php": ">=5.3.3",
-		"phpbb/phpbb": "3.1.*@dev"
-	},
+    "name": "boardtools/cronstatus",
+    "type": "phpbb-extension",
+    "description": "Cron Status displays an overview of Board's Cron Jobs in Maintenance module of ACP. This extension also shows a notification on the main page of ACP when a cron job is locked (optionally). It shows the time when the cron task started and which cron task was the problem.",
+    "homepage": "http://forumhulp.com",
+    "version": "3.1.0-RC3",
+    "keywords": ["boardtools", "forumhulp", "phpbb", "extension", "cron", "status"],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "John Peskens",
+            "email": "info@forumhulp.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Igor Lavrov",
+            "homepage": "https://github.com/lavigor",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "phpbb/phpbb": "3.1.*@dev"
+    },
     "require-dev": {
         "phpbb/epv": "dev-master"
     },
-	"extra": {
-		"display-name": "Cron Status",
-		"soft-require": {
+    "extra": {
+        "display-name": "Cron Status",
+        "soft-require": {
            "phpbb/phpbb": "3.1.*@dev"
         },
-		"version-check": {
-			"host": "forumhulp.com",
-			"directory": "/ext",
-			"filename": "index.php?id=28"
-		}
-	}
+        "version-check": {
+            "host": "forumhulp.com",
+            "directory": "/ext",
+            "filename": "index.php?id=28"
+        }
+    }
 }
