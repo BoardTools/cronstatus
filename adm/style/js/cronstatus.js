@@ -36,6 +36,7 @@
 					$(this).html(s);
 					$('#date').text(getISODateTime());
 					$(".cron_run").bind("click", run_cron);
+					parse_document($("#cron_table_container"));
 				}
 			});
 		}

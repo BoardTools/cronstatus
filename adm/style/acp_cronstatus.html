@@ -2,7 +2,7 @@
 <!-- IF S_ALLOW_CDN -->
 <!-- INCLUDECSS //maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css -->
 <!-- ELSE -->
-<!-- INCLUDECSS css/font-awesome.min.css -->
+<!-- INCLUDECSS ./../../ext/boardtools/cronstatus/vendor/font-awesome/css/font-awesome.min.css -->
 <!-- ENDIF -->
 <!-- INCLUDECSS css/cronstatus.css -->
 <!-- INCLUDECSS css/jquery.simpledialog.css -->
@@ -15,51 +15,59 @@
 
 <p>{L_ACP_CRON_STATUS_EXPLAIN}</p>
 
+<div id="cron_table_container">
 <!-- ENDIF -->
 <!-- IF .ready or .not_ready -->
-<table class="table1" id="cron_table">
-	<col class="row1">
-	<col class="row1">
-   	<col class="row1">
-	<thead>
-		<tr>
-			<th>{L_CRON_TASK_NAME}
-            <a href="{U_ACTION}&amp;sk=display_name&amp;sd=d" title="{L_DESCENDING}"><i class="fa fa-arrow-up"<!-- IF U_NAME == 'display_name' and U_SORT == 'd' --> id="act-arrow"<!-- ENDIF -->></i></a> 
-            <a href="{U_ACTION}&amp;sk=display_name&amp;sd=a" title="{L_ASCENDING}"><i class="fa fa-arrow-down"<!-- IF U_NAME == 'display_name' and U_SORT == 'a' --> id="act-arrow"<!-- ENDIF -->></i></a></th>
-			<th>{L_CRON_TASK_DATE}<a href="{U_ACTION}&amp;sk=task_date&amp;sd=d" title="{L_DESCENDING}"><i class="fa fa-arrow-up"<!-- IF U_NAME == 'task_date' and U_SORT == 'd' --> id="act-arrow"<!-- ENDIF -->></i></a> 
-            <a href="{U_ACTION}&amp;sk=task_date&amp;sd=a" title="{L_ASCENDING}"><i class="fa fa-arrow-down"<!-- IF U_NAME == 'task_date' and U_SORT == 'a' --> id="act-arrow"<!-- ENDIF -->></i></a></th>
-            <th>{L_CRON_NEW_DATE}<a href="{U_ACTION}&amp;sk=new_date&amp;sd=d" title="{L_DESCENDING}"><i class="fa fa-arrow-up"<!-- IF U_NAME == 'new_date' and U_SORT == 'd' --> id="act-arrow"<!-- ENDIF -->></i></a> 
-            <a href="{U_ACTION}&amp;sk=new_date&amp;sd=a" title="{L_ASCENDING}"><i class="fa fa-arrow-down"<!-- IF U_NAME == 'new_date' and U_SORT == 'a' --> id="act-arrow"<!-- ENDIF -->></i></a></th>
-		</tr>
-	</thead>
-	<tbody>
-		<!-- IF .ready -->
-		<tr>
-			<td class="row3" colspan="3"><b>{L_CRON_STATUS_READY_TASKS}</b><span id="date" style="float:right" title="{L_CRON_TASK_DATE_TIME}">&nbsp;</span></td>
-		</tr>
-		<!-- BEGIN ready -->
-		<tr>
-			<td><strong>{ready.DISPLAY_NAME}</strong><!-- IF ready.LOCKED --> <i class="fa fa-lock" title="{L_CRON_TASK_LOCKED}"></i><!-- ENDIF --><span class="cron_run" id="{ready.DISPLAY_NAME}">{L_CRON_TASK_RUN}</span><span class="cron_running" id="{ready.DISPLAY_NAME}_running">{L_CRON_TASK_RUNNING}</span></td>
-			<td>{ready.TASK_DATE}</td>
+<table class="table1" id="cron_table" data-no-responsive-header="true">
+    <col class="row1">
+    <col class="row1">
+    <col class="row1">
+    <thead>
+        <tr>
+            <th>
+                {L_CRON_TASK_NAME}
+                <a href="{U_ACTION}&amp;sk=display_name&amp;sd=d" title="{L_DESCENDING}"><i class="fa fa-arrow-up"<!-- IF U_NAME == 'display_name' and U_SORT == 'd' --> id="act-arrow"<!-- ENDIF -->></i></a>
+                <a href="{U_ACTION}&amp;sk=display_name&amp;sd=a" title="{L_ASCENDING}"><i class="fa fa-arrow-down"<!-- IF U_NAME == 'display_name' and U_SORT == 'a' --> id="act-arrow"<!-- ENDIF -->></i></a>
+            </th>
+            <th>
+                {L_CRON_TASK_DATE}<a href="{U_ACTION}&amp;sk=task_date&amp;sd=d" title="{L_DESCENDING}"><i class="fa fa-arrow-up"<!-- IF U_NAME == 'task_date' and U_SORT == 'd' --> id="act-arrow"<!-- ENDIF -->></i></a>
+                <a href="{U_ACTION}&amp;sk=task_date&amp;sd=a" title="{L_ASCENDING}"><i class="fa fa-arrow-down"<!-- IF U_NAME == 'task_date' and U_SORT == 'a' --> id="act-arrow"<!-- ENDIF -->></i></a>
+            </th>
+            <th>
+                {L_CRON_NEW_DATE}<a href="{U_ACTION}&amp;sk=new_date&amp;sd=d" title="{L_DESCENDING}"><i class="fa fa-arrow-up"<!-- IF U_NAME == 'new_date' and U_SORT == 'd' --> id="act-arrow"<!-- ENDIF -->></i></a>
+                <a href="{U_ACTION}&amp;sk=new_date&amp;sd=a" title="{L_ASCENDING}"><i class="fa fa-arrow-down"<!-- IF U_NAME == 'new_date' and U_SORT == 'a' --> id="act-arrow"<!-- ENDIF -->></i></a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- IF .ready -->
+        <tr>
+            <td class="row3" colspan="3"><b>{L_CRON_STATUS_READY_TASKS}</b><span id="date" style="float:right" title="{L_CRON_TASK_DATE_TIME}">&nbsp;</span></td>
+        </tr>
+        <!-- BEGIN ready -->
+        <tr>
+            <td><strong>{ready.DISPLAY_NAME}</strong><!-- IF ready.LOCKED --> <i class="fa fa-lock" title="{L_CRON_TASK_LOCKED}"></i><!-- ENDIF --><span class="cron_run" id="{ready.DISPLAY_NAME}">{L_CRON_TASK_RUN}</span><span class="cron_running" id="{ready.DISPLAY_NAME}_running">{L_CRON_TASK_RUNNING}</span></td>
+            <td>{ready.TASK_DATE}</td>
             <td><!-- IF ready.NEW_DATE -->{ready.NEW_DATE}<!-- ELSE -->-<!-- ENDIF --></td>
-		</tr>
-		<!-- END ready -->
-		<!-- ENDIF -->
-		<!-- IF .not_ready -->
-		<tr>
-			<td class="row3" colspan="3"><b>{L_CRON_STATUS_NOT_READY_TASKS}</b><!-- IF not .ready --><span id="date" style="float:right" title="{L_CRON_TASK_DATE_TIME}">&nbsp;</span><!-- ENDIF --></td>
-		</tr>
-		<!-- BEGIN not_ready -->
-		<tr>
-			<td><strong<!-- IF not_ready.TASK_OK or not_ready.LOCKED --> style="color: #BC2A4D;"<!-- ENDIF -->>{not_ready.DISPLAY_NAME}</strong><!-- IF not_ready.LOCKED --> <i class="fa fa-lock" title="{L_CRON_TASK_LOCKED}"></i><!-- ENDIF --></td>
-			<td>{not_ready.TASK_DATE}</td>
+        </tr>
+        <!-- END ready -->
+        <!-- ENDIF -->
+        <!-- IF .not_ready -->
+        <tr>
+            <td class="row3" colspan="3"><b>{L_CRON_STATUS_NOT_READY_TASKS}</b><!-- IF not .ready --><span id="date" style="float:right" title="{L_CRON_TASK_DATE_TIME}">&nbsp;</span><!-- ENDIF --></td>
+        </tr>
+        <!-- BEGIN not_ready -->
+        <tr>
+            <td><strong<!-- IF not_ready.TASK_OK or not_ready.LOCKED --> style="color: #BC2A4D;"<!-- ENDIF -->>{not_ready.DISPLAY_NAME}</strong><!-- IF not_ready.LOCKED --> <i class="fa fa-lock" title="{L_CRON_TASK_LOCKED}"></i><!-- ENDIF --></td>
+            <td>{not_ready.TASK_DATE}</td>
             <td><!-- IF not_ready.NEW_DATE -->{not_ready.NEW_DATE}<!-- ELSE -->-<!-- ENDIF --></td>
-		</tr>
-		<!-- END not_ready -->
-		<!-- ENDIF -->
-	</tbody>
+        </tr>
+        <!-- END not_ready -->
+        <!-- ENDIF -->
+    </tbody>
 </table>
 <!-- IF not VIEW_TABLE -->
+</div>
 <img id="run_cron_task" src="" width="1" height="1" alt="cron" /><br />
 <!-- INCLUDEJS js/jquery.simpledialog.js -->
 <!-- INCLUDEJS js/cronstatus.js -->

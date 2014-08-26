@@ -5,8 +5,10 @@ Cron Status displays an overview of Board's Cron Jobs in Maintenance module of A
 [![Build Status](https://travis-ci.org/BoardTools/cronstatus.svg?branch=master)](https://travis-ci.org/BoardTools/cronstatus)
 
 ## Requirements
-* phpBB 3.1.0-dev or higher (phpBB 3.1.0-RC3 or higher for Cron Status Notice on ACP index)
+* phpBB 3.1.0-RC3 or higher
 * PHP 5.3.3 or higher
+
+You can also download an [old release for early development versions of phpBB 3.1.0](https://github.com/BoardTools/cronstatus/releases/tag/v3.1.0-dev).
 
 ## Quick Installation
 You can quickly install this extension (without using FTP) on the latest copy of the develop branch ([phpBB 3.1-dev](https://github.com/phpbb/phpbb3)) by doing the following:
