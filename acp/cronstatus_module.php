@@ -189,8 +189,9 @@ class cronstatus_module
 						'task_date'			=> $task_date,
 						'task_date_print'	=> ($task_date == -1) ? $user->lang['CRON_TASK_AUTO'] : (($task_date) ?	$user->format_date($task_date, $config['cronstatus_dateformat']) : $user->lang['CRON_TASK_NEVER_STARTED']),
 						'new_date'			=> ($task_date > 0) ? $task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) : 0,
-						'new_date_print'	=> ($task_date > 0) ? $user->format_date(($task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows)), $config['cronstatus_dateformat']) : '-',
-						'task_ok'			=> ($task_date > 0 && ($task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) > time())) ? false : true,
+						'new_date_print'	=> ($task_date > 0 && (isset($config[$name . '_expire_days']) ? $config[$name . '_expire_days'] : 1) && (($name == 'queue_interval' && ($task_date + $config['queue_interval']) < time()) ? 0 : 1)) ? $user->format_date(($task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows)), $config['cronstatus_dateformat']) : '-',
+						'task_ok'			=> ($task_date > 0 && 
+						(!$config[$name . '_expire_days'] || $task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) > time())) ? false : true,
 						'locked'			=> ($config['cron_lock'] && $cronlock == $name) ? true : false,
 					);
 				}
