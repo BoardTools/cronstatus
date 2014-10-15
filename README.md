@@ -15,7 +15,7 @@ You can quickly install this extension (without using FTP) on the latest copy of
 
 1. Make sure that the extension "[Upload Extensions](https://github.com/BoardTools/upload)" is installed on your board.
 2. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
-3. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Upload extensions`.
+3. Navigate in the ACP to `Customise -> Extension Management -> Upload extensions`.
 4. Choose the downloaded ZIP-archive in the `Browse` field and click `Upload`.
 5. Click `Enable`.
 
