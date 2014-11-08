@@ -5,13 +5,13 @@ Cron Status displays an overview of Board's Cron Jobs in Maintenance module of A
 [![Build Status](https://travis-ci.org/BoardTools/cronstatus.svg?branch=master)](https://travis-ci.org/BoardTools/cronstatus)
 
 ## Requirements
-* phpBB 3.1.0-RC3 or higher
+* phpBB 3.1.0 or higher
 * PHP 5.3.3 or higher
 
 You can also download an [old release for early development versions of phpBB 3.1.0](https://github.com/BoardTools/cronstatus/releases/tag/v3.1.0-dev).
 
 ## Quick Installation
-You can quickly install this extension (without using FTP) on the latest copy of the develop branch ([phpBB 3.1-dev](https://github.com/phpbb/phpbb3)) by doing the following:
+You can quickly install this extension on the latest version of [phpBB 3.1](https://www.phpbb.com/downloads/) or on the latest development version of [phpBB 3.1-dev](https://github.com/phpbb/phpbb3) by doing the following:
 
 1. Make sure that the extension "[Upload Extensions](https://github.com/BoardTools/upload)" is installed on your board.
 2. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
@@ -20,15 +20,13 @@ You can quickly install this extension (without using FTP) on the latest copy of
 5. Click `Enable`.
 
 ## Standard Installation
-You can install this extension on the latest copy of the develop branch ([phpBB 3.1-dev](https://github.com/phpbb/phpbb3)) by doing the following:
+You can install this extension on the latest version of [phpBB 3.1](https://www.phpbb.com/downloads/) or on the latest development version of [phpBB 3.1-dev](https://github.com/phpbb/phpbb3) by doing the following:
 
 1. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
 2. Check out the existing of the folder `/ext/boardtools/cronstatus/` in the root of your board folder. Create folders if necessary.
 3. Copy the contents of the downloaded `cronstatus-master` folder to `/ext/boardtools/cronstatus/`.
 4. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Cron Status`.
 5. Click `Enable`.
-
-Note: This extension is in development. Installation is only recommended for testing purposes and is not supported on live boards. This extension will be officially released following phpBB 3.1.0.
 
 ## Usage
 ### Cron Status page

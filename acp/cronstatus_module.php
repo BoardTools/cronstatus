@@ -18,6 +18,7 @@ class cronstatus_module
 
 		$this->page_title = $user->lang['ACP_CRON_STATUS_TITLE'];
 		$this->tpl_name = 'acp_cronstatus';
+		$user->add_lang_ext('boardtools/cronstatus', 'cronstatus');
 
 		list($sk_config, $sd_config) = explode("|", $config['cronstatus_default_sort']);
 
@@ -71,15 +72,32 @@ class cronstatus_module
 				));
 			}
 
-			$template->assign_vars(array(
-				'U_BACK'				=> $this->u_action . '&amp;action=list',
-			));
+			if ($request->is_ajax())
+			{
+				$template->assign_vars(array(
+					'IS_AJAX'				=> true,
+				));
+			}
+			else
+			{
+				$template->assign_vars(array(
+					'U_BACK'				=> $this->u_action,
+				));
+			}
 
 			$this->tpl_name = 'acp_ext_details';
 			break;
 
 			default:
 			$view_table = $request->variable('table', false);
+			$cron_type = request_var('cron_type', '');
+
+			if (!($request->is_ajax()) && $cron_type)
+			{
+				$url = '../cron.php?cron_type='.$cron_type;
+				$template->assign_var('RUN_CRON_TASK', '<img src="' . $url . '" width="1" height="1" alt="cron" />');
+				meta_refresh(60, $this->u_action . '&amp;sk=' . $sk . '&amp;sd='. $sd);
+			}
 
 			$tasks = $task_array = array();
 			$tasks = $phpbb_container->get('cron.manager')->get_tasks();
@@ -189,9 +207,8 @@ class cronstatus_module
 						'task_date'			=> $task_date,
 						'task_date_print'	=> ($task_date == -1) ? $user->lang['CRON_TASK_AUTO'] : (($task_date) ?	$user->format_date($task_date, $config['cronstatus_dateformat']) : $user->lang['CRON_TASK_NEVER_STARTED']),
 						'new_date'			=> ($task_date > 0) ? $task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) : 0,
-						'new_date_print'	=> ($task_date > 0 && (isset($config[$name . '_expire_days']) ? $config[$name . '_expire_days'] : 1) && (($name == 'queue_interval' && ($task_date + $config['queue_interval']) < time()) ? 0 : 1)) ? $user->format_date(($task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows)), $config['cronstatus_dateformat']) : '-',
-						'task_ok'			=> ($task_date > 0 &&
-						(!$config[$name . '_expire_days'] || $task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) > time())) ? false : true,
+						'new_date_print'	=> ($task_date > 0) ? $user->format_date(($task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows)), $config['cronstatus_dateformat']) : '-',
+						'task_ok'			=> ($task_date > 0 && ($task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) > time())) ? false : true,
 						'locked'			=> ($config['cron_lock'] && $cronlock == $name) ? true : false,
 					);
 				}
@@ -207,6 +224,7 @@ class cronstatus_module
 						'NEW_DATE'		=> $row['new_date_print'],
 						'TASK_OK'		=> $row['task_ok'],
 						'LOCKED'		=> $row['locked'],
+						'CRON_TASK_RUN'	=> ($request->is_ajax()) ? '' : (($row['display_name'] != $cron_type) ? '<a href="' . $this->u_action . '&amp;cron_type=' . $row['display_name'] . '&amp;sk=' . $sk . '&amp;sd='. $sd . '" class="cron_run_link">'.$user->lang['CRON_TASK_RUN'].'</a>' : '<span class="cron_running_update">'.$user->lang['CRON_TASK_RUNNING'].'</span>'),
 					));
 				}
 			}

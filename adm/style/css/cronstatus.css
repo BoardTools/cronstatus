@@ -1,16 +1,16 @@
 /* CSS Document */
 
 h1 {position: relative;}
-#circle {float: right; font-size: 30px;}
+#circle {display: none; float: right; font-size: 30px;}
 
-#ProgressStatus {position: absolute; z-index: 2; top: 2px; right: 8px; font-size: 12px; font-weight: bold;}
+#ProgressStatus {display: none; position: absolute; z-index: 2; top: 2px; right: 8px; font-size: 12px; font-weight: bold;}
 
 .table1 th + th {text-align: center; width: 200px;}
 .table1 td + td {text-align: center;}
 
 .table1 td strong {color:#228822;}
 
-.fa-lock {color:#BC2A4D;}
+.cron-locked {color:#BC2A4D;}
 
 .fa-arrow-up, .fa-arrow-down {float:right; color:#fff; padding: 0 2px;}
 
@@ -29,11 +29,47 @@ h1 {position: relative;}
 #LoadError {position: absolute; z-index: 2; top: 0; right: 0;}
 #LoadError i {display: inline-block; margin-right: 5px;}
 
-.cron_run {float: right; color: #105289; cursor: pointer;}
+.cron_run {float: right; color: #105289; cursor: pointer; display: none;}
 .cron_run:hover {color: #bc2a4d; text-decoration: underline;}
+.cron_run_link, .cron_running_update {float: right;}
 .cron_running {float: right; display: none;}
 
 /* Extension details */
+.description_title {
+    display: block;
+    color: #115098;
+    font-weight: bold;
+    vertical-align: top;
+    margin: 0;
+    font-size: 1.1em;
+}
+.description_fieldset fieldset {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+.description_fieldset h1 {
+    box-sizing: border-box;
+    display: block;
+    border-radius: 15px;
+    padding: 5px 15px;
+    font-size: 1.2em;
+}
+.description_fieldset p {
+    display: block;
+    padding: 5px 10px;
+    font-size: 0.9em;
+}
+.description_fieldset p.description_list {
+    padding: 10px 15px 0 15px;
+}
+.description_fieldset span {
+    box-sizing: border-box;
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
 .requirements_title {
     display: inline-block;
     color: #115098;

@@ -44,7 +44,6 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.user_setup'					=> 'load_language_on_setup',
 			'core.acp_main_notice'				=> 'load_cronstatus',
 			'core.acp_board_config_edit_add'	=> 'add_config',
 		);
@@ -52,6 +51,7 @@ class listener implements EventSubscriberInterface
 
 	public function load_cronstatus($event)
 	{
+		$this->user->add_lang_ext('boardtools/cronstatus', 'cronstatus');
 		$tasks = $this->cron_manager->get_tasks();
 
 		if (empty($tasks) || !$this->config['cron_lock'] || !$this->config['cronstatus_main_notice'])
@@ -64,7 +64,7 @@ class listener implements EventSubscriberInterface
 		$sql = 'SELECT * FROM ' . CONFIG_TABLE . ' where config_name LIKE "%last_gc" ORDER BY config_value DESC LIMIT 1';
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
-		$task = str_replace('_last_gc', '',$row['config_name']);
+		$task = str_replace('_last_gc', '', $row['config_name']);
 		$task = str_replace('read_notification', 'prune_notification', $task);
 
 		$task = $this->array_find($task, $tasks);
@@ -97,6 +97,7 @@ class listener implements EventSubscriberInterface
 	{
 		if($event['mode'] == 'settings')
 		{
+			$this->user->add_lang_ext('boardtools/cronstatus', 'cronstatus');
 			$display_vars = $event['display_vars'];
 			/* We add a new legend, but we need to search for the last legend instead of hard-coding */
 			$submit_key = array_search('ACP_SUBMIT_CHANGES', $display_vars['vars']);
@@ -110,15 +111,5 @@ class listener implements EventSubscriberInterface
 			$display_vars['vars'] = phpbb_insert_config_array($display_vars['vars'], $new_vars, array('after' => $submit_key));
 			$event['display_vars'] = $display_vars;
 		}
-	}
-
-	public function load_language_on_setup($event)
-	{
-		$lang_set_ext = $event['lang_set_ext'];
-		$lang_set_ext[] = array(
-			'ext_name' => 'boardtools/cronstatus',
-			'lang_set' => 'cronstatus',
-		);
-		$event['lang_set_ext'] = $lang_set_ext;
 	}
 }

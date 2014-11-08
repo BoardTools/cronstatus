@@ -1,6 +1,6 @@
 <!-- IF not VIEW_TABLE -->
 <!-- IF S_ALLOW_CDN -->
-<!-- INCLUDECSS //maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css -->
+<!-- INCLUDECSS //maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css -->
 <!-- ELSE -->
 <!-- INCLUDECSS ./../../ext/boardtools/cronstatus/vendor/font-awesome/css/font-awesome.min.css -->
 <!-- ENDIF -->
@@ -46,7 +46,7 @@
         </tr>
         <!-- BEGIN ready -->
         <tr>
-            <td><strong>{ready.DISPLAY_NAME}</strong><!-- IF ready.LOCKED --> <i class="fa fa-lock" title="{L_CRON_TASK_LOCKED}"></i><!-- ENDIF --><span class="cron_run" id="{ready.DISPLAY_NAME}">{L_CRON_TASK_RUN}</span><span class="cron_running" id="{ready.DISPLAY_NAME}_running">{L_CRON_TASK_RUNNING}</span></td>
+            <td><strong>{ready.DISPLAY_NAME}</strong><!-- IF ready.LOCKED --> <i class="fa fa-lock cron-locked" title="{L_CRON_TASK_LOCKED}"></i><!-- ENDIF -->{ready.CRON_TASK_RUN}<span class="cron_run" id="{ready.DISPLAY_NAME}">{L_CRON_TASK_RUN}</span><span class="cron_running" id="{ready.DISPLAY_NAME}_running">{L_CRON_TASK_RUNNING}</span></td>
             <td>{ready.TASK_DATE}</td>
             <td><!-- IF ready.NEW_DATE -->{ready.NEW_DATE}<!-- ELSE -->-<!-- ENDIF --></td>
         </tr>
@@ -58,7 +58,7 @@
         </tr>
         <!-- BEGIN not_ready -->
         <tr>
-            <td><strong<!-- IF not_ready.TASK_OK or not_ready.LOCKED --> style="color: #BC2A4D;"<!-- ENDIF -->>{not_ready.DISPLAY_NAME}</strong><!-- IF not_ready.LOCKED --> <i class="fa fa-lock" title="{L_CRON_TASK_LOCKED}"></i><!-- ENDIF --></td>
+            <td><strong<!-- IF not_ready.TASK_OK or not_ready.LOCKED --> style="color: #BC2A4D;"<!-- ENDIF -->>{not_ready.DISPLAY_NAME}</strong><!-- IF not_ready.LOCKED --> <i class="fa fa-lock cron-locked" title="{L_CRON_TASK_LOCKED}"></i><!-- ENDIF --></td>
             <td>{not_ready.TASK_DATE}</td>
             <td><!-- IF not_ready.NEW_DATE -->{not_ready.NEW_DATE}<!-- ELSE -->-<!-- ENDIF --></td>
         </tr>
@@ -68,7 +68,7 @@
 </table>
 <!-- IF not VIEW_TABLE -->
 </div>
-<img id="run_cron_task" src="" width="1" height="1" alt="cron" /><br />
+<img id="run_cron_task" src="" width="1" height="1" alt="" />{RUN_CRON_TASK}<br />
 <!-- INCLUDEJS js/jquery.simpledialog.js -->
 <!-- INCLUDEJS js/cronstatus.js -->
 <!-- ENDIF -->
