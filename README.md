@@ -13,17 +13,15 @@ You can also download an [old release for early development versions of phpBB 3.
 ## Quick Installation
 You can quickly install this extension on the latest version of [phpBB 3.1](https://www.phpbb.com/downloads/) or on the latest development version of [phpBB 3.1-dev](https://github.com/phpbb/phpbb3) by doing the following:
 
-1. Make sure that the extension "[Upload Extensions](https://github.com/BoardTools/upload)" is installed on your board.
-2. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
-3. Navigate in the ACP to `Customise -> Extension Management -> Upload extensions`.
-4. Choose the downloaded ZIP-archive in the `Browse` field and click `Upload`.
-5. Click `Enable`.
+1. Upload the extension with "[Upload Extensions](https://github.com/BoardTools/upload)".
+2. Check that you have uploaded the correct files.
+3. Click `Enable`.
 
 ## Standard Installation
 You can install this extension on the latest version of [phpBB 3.1](https://www.phpbb.com/downloads/) or on the latest development version of [phpBB 3.1-dev](https://github.com/phpbb/phpbb3) by doing the following:
 
-1. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
-2. Check out the existing of the folder `/ext/boardtools/cronstatus/` in the root of your board folder. Create folders if necessary.
+1. Download the extension. You can do it [directly from phpbb.com](https://www.phpbb.com/customise/db/extension/cronstatus/) or by downloading the [latest ZIP-archive of `master` branch of its GitHub repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
+2. Check out the existence of the folder `/ext/boardtools/cronstatus/` in the root of your board folder. Create folders if necessary.
 3. Copy the contents of the downloaded `cronstatus-master` folder to `/ext/boardtools/cronstatus/`.
 4. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Cron Status`.
 5. Click `Enable`.
@@ -41,7 +39,7 @@ You can change the date format for Cron Status or remove Cron Status Notice that
 Navigate in the ACP to `General -> Board configuration -> Board settings -> Cron Status`.
 
 ## Update
-1. Download the [latest ZIP-archive of `master` branch of this repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
+1. Download the updated extension. You can do it [directly from phpbb.com](https://www.phpbb.com/customise/db/extension/cronstatus/) or by downloading the [latest ZIP-archive of `master` branch of its GitHub repository](https://github.com/BoardTools/cronstatus/archive/master.zip).
 2. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Cron Status` and click `Disable`.
 3. Copy the contents of the downloaded `cronstatus-master` folder to `/ext/boardtools/cronstatus/`.
 4. Navigate in the ACP to `Customise -> Extension Management -> Manage extensions -> Cron Status` and click `Enable`.

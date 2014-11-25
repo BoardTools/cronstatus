@@ -90,7 +90,7 @@ class cronstatus_module
 
 			default:
 			$view_table = $request->variable('table', false);
-			$cron_type = request_var('cron_type', '');
+			$cron_type = $request->variable('cron_type', '');
 
 			if (!($request->is_ajax()) && $cron_type)
 			{
