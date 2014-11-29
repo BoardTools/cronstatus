@@ -37,7 +37,9 @@
 					interval = setInterval(progress, 1000);
 					$(this).html(s);
 					$('#date').text(getISODateTime());
+					$(".cron_run_link").css("display", "none");
 					$(".cron_run").bind("click", run_cron);
+					$(".cron_run").css("display", "block");
 					parse_document($("#cron_table_container"));
 				}
 			});

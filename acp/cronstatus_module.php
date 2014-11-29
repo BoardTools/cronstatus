@@ -102,61 +102,11 @@ class cronstatus_module
 			$tasks = $task_array = array();
 			$tasks = $phpbb_container->get('cron.manager')->get_tasks();
 
-			if (sizeof($tasks))
+			$cronlock = '';
+			$rows = $phpbb_container->get('boardtools.cronstatus.listener')->get_cron_tasks($cronlock);
+
+			if (sizeof($tasks) && is_array($rows))
 			{
-				$sql = 'SELECT config_name, config_value FROM '.CONFIG_TABLE.' WHERE config_name LIKE "%gc" OR config_name LIKE "%queue%"';
-				$result = $db->sql_query($sql);
-				$rows = $db->sql_fetchrowset($result);
-				$db->sql_freeresult($result);
-
-				$sql = 'SELECT prune_next, prune_days * 86400 AS prune_time FROM ' . FORUMS_TABLE . ' WHERE enable_prune = 1 ORDER BY prune_next';
-				$result = $db->sql_query_limit($sql, 1);
-				$prune = $db->sql_fetchrow($result);
-				$rows[] = array(
-					"config_name"	=> "prune_forum_last_gc",
-					"config_value"	=> $prune['prune_next']
-				);
-				$rows[] = array(
-					"config_name"	=> "prune_forum_gc",
-					"config_value"	=> $prune['prune_time']
-				);
-				$db->sql_freeresult($result);
-
-				$sql = 'SELECT prune_shadow_next, prune_shadow_days * 86400 AS prune_shadow_time FROM ' . FORUMS_TABLE . ' WHERE enable_shadow_prune = 1 ORDER BY prune_shadow_next';
-				$result = $db->sql_query_limit($sql, 1);
-				$prune_shadow = $db->sql_fetchrow($result);
-				$rows[] = array(
-					"config_name"	=> "prune_shadow_topics_last_gc",
-					"config_value"	=> $prune_shadow['prune_shadow_next']
-				);
-				$rows[] = array(
-					"config_name"	=> "prune_shadow_topics_gc",
-					"config_value"	=> $prune_shadow['prune_shadow_time']
-				);
-				$db->sql_freeresult($result);
-
-				$rows[] = array(
-					"config_name"	=> "plupload_gc",
-					"config_value"	=> 86400
-				);
-
-				if ($config['cron_lock'])
-				{
-					$cronlock = $this->maxValueInArray($rows, 'config_value');
-					$cronlock = str_replace(array('_last_gc', 'prune_notification', 'last_queue_run'), array('', 'read_notifications', 'queue_interval'), $cronlock['config_name']);
-				}
-
-				/**
-				* Event to modify cron configuration variables before displaying cron information
-				*
-				* @event boardtools.cronstatus.modify_cron_config
-				* @var	array	rows		Configuration array
-				* @var	string	cronlock	Name of task that released cron lock (in last task date format)
-				* @since 3.1.0-RC3
-				*/
-				$vars = array('rows', 'cronlock');
-				extract($phpbb_dispatcher->trigger_event('boardtools.cronstatus.modify_cron_config', compact($vars)));
-
 				foreach ($tasks as $task)
 				{
 					$task_name = $task->get_name();
@@ -182,23 +132,29 @@ class cronstatus_module
 					{
 						$task_date = (int) $this->array_find('last_queue_run', $rows);
 						$name = 'queue_interval';
-					} else
-					{
-						$name = substr($task_name, strrpos($task_name, ".") + 1);
-						$task_date = (int) $this->array_find($name . '_last_gc', $rows);
 					}
+					else
+					{
+						$name = (strrpos($task_name, ".") !== false) ? substr($task_name, strrpos($task_name, ".") + 1) : $task_name;
+						$task_last_gc = $this->array_find($name . '_last_gc', $rows);
+						$task_date = ($task_last_gc !== false) ? (int) $task_last_gc : -1;
+					}
+
+					$new_task_date = ($task_date > 0) ? $task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) : 0;
 
 					/**
 					* Event to modify task variables before displaying cron information
 					*
 					* @event boardtools.cronstatus.modify_cron_task
-					* @var	object	task		Task object
-					* @var	object	task_name	Task name ($task->get_name())
-					* @var	object	name		Task name for new task date
-					* @var	object	task_date	Last task date
+					* @var	object	task			Task object
+					* @var	object	task_name		Task name ($task->get_name())
+					* @var	object	name			Task name for new task date
+					* @var	object	task_date		Last task date
+					* @var	object	new_task_date	Next task date
 					* @since 3.1.0-RC3
+					* @changed 3.1.1
 					*/
-					$vars = array('task', 'task_name', 'name', 'task_date');
+					$vars = array('task', 'task_name', 'name', 'task_date', 'new_task_date');
 					extract($phpbb_dispatcher->trigger_event('boardtools.cronstatus.modify_cron_task', compact($vars)));
 
 					$task_array[] = array(
@@ -206,9 +162,9 @@ class cronstatus_module
 						'display_name'		=> $task_name,
 						'task_date'			=> $task_date,
 						'task_date_print'	=> ($task_date == -1) ? $user->lang['CRON_TASK_AUTO'] : (($task_date) ?	$user->format_date($task_date, $config['cronstatus_dateformat']) : $user->lang['CRON_TASK_NEVER_STARTED']),
-						'new_date'			=> ($task_date > 0) ? $task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) : 0,
-						'new_date_print'	=> ($task_date > 0) ? $user->format_date(($task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows)), $config['cronstatus_dateformat']) : '-',
-						'task_ok'			=> ($task_date > 0 && ($task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) > time())) ? false : true,
+						'new_date'			=> $new_task_date,
+						'new_date_print'	=> ($task_date > 0) ? $user->format_date($new_task_date, $config['cronstatus_dateformat']) : '-',
+						'task_ok'			=> ($task_date > 0 && ($new_task_date > time())) ? false : true,
 						'locked'			=> ($config['cron_lock'] && $cronlock == $name) ? true : false,
 					);
 				}
@@ -275,23 +231,6 @@ class cronstatus_module
 		return $new_array;
 	}
 
-	public function maxValueInArray($array, $keyToSearch)
-	{
-		$currentMax = null;
-		foreach($array as $arr)
-		{
-			foreach($arr as $key => $value)
-			{
-				if ($key == $keyToSearch && ($value >= $currentMax))
-				{
-					$currentMax = $value;
-					$currentName = $arr['config_name'];
-				}
-			}
-		}
-		return array('config_name' => $currentName , 'config_value' => $currentMax);
-	}
-
 	// array_search with partial matches
 	public function array_find($needle, $haystack)
 	{
@@ -330,7 +269,14 @@ class cronstatus_module
 
 		$version_check = $meta['extra']['version-check'];
 
-		$version_helper = new \phpbb\version_helper($cache, $config, new \phpbb\file_downloader(), $user);
+		if (version_compare($config['version'], '3.1.1', '>'))
+		{
+			$version_helper = new \phpbb\version_helper($cache, $config, new \phpbb\file_downloader(), $user);
+		}
+		else
+		{
+			$version_helper = new \phpbb\version_helper($cache, $config, $user);
+		}
 		$version_helper->set_current_version($meta['version']);
 		$version_helper->set_file_location($version_check['host'], $version_check['directory'], $version_check['filename']);
 		$version_helper->force_stability($config['extension_force_unstable'] ? 'unstable' : null);
