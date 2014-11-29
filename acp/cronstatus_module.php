@@ -152,7 +152,7 @@ class cronstatus_module
 					* @var	object	task_date		Last task date
 					* @var	object	new_task_date	Next task date
 					* @since 3.1.0-RC3
-					* @changed 3.1.1
+					* @changed 3.1.1 Added new_task_date variable
 					*/
 					$vars = array('task', 'task_name', 'name', 'task_date', 'new_task_date');
 					extract($phpbb_dispatcher->trigger_event('boardtools.cronstatus.modify_cron_task', compact($vars)));
