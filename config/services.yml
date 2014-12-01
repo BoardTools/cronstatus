@@ -8,5 +8,6 @@ services:
             - @template
             - @dbal.conn
             - @cron.manager
+            - @dispatcher
         tags:
             - { name: event.listener }
