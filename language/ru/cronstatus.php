@@ -45,3 +45,14 @@ $lang = array_merge($lang, array(
 	'CRON_TASK_RUN'						=> 'Выполнить',
 	'CRON_TASK_RUNNING'					=> 'Выполняется...',
 ));
+
+// Description of Cron Status extension
+$lang = array_merge($lang, array(
+	'CRONSTATUS_DESCRIPTION_PAGE'				=> 'Страница Статуса Cron',
+	'CRONSTATUS_DESCRIPTION_PAGE_OVERVIEW'		=> 'Перечень заданий Cron (с сортировкой)',
+	'CRONSTATUS_DESCRIPTION_PAGE_STATUS'		=> 'Отображает статус каждого задания Cron',
+	'CRONSTATUS_DESCRIPTION_PAGE_ABILITY'		=> 'Вы можете вручную выполнить любое готовое для выполнения задание',
+	'CRONSTATUS_DESCRIPTION_NOTICE'				=> 'Уведомление о Статусе Cron (опционально)',
+	'CRONSTATUS_DESCRIPTION_NOTICE_OVERVIEW'	=> 'Отображается на главной странице администраторского раздела, когда cron заблокирован',
+	'CRONSTATUS_DESCRIPTION_NOTICE_SETTINGS'	=> 'Может быть выключено в разделе Настройки конференции',
+));

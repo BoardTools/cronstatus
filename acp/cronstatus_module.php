@@ -14,7 +14,7 @@ class cronstatus_module
 	public $u_action;
 	function main($id, $mode)
 	{
-		global $db, $config, $user, $cache, $template, $request, $phpbb_root_path, $phpbb_extension_manager, $phpbb_container, $phpbb_dispatcher;
+		global $db, $config, $user, $cache, $template, $request, $phpbb_root_path, $phpEx, $phpbb_extension_manager, $phpbb_container, $phpbb_dispatcher;
 
 		$this->page_title = $user->lang['ACP_CRON_STATUS_TITLE'];
 		$this->tpl_name = 'acp_cronstatus';
@@ -94,8 +94,8 @@ class cronstatus_module
 
 			if (!($request->is_ajax()) && $cron_type)
 			{
-				$url = '../cron.php?cron_type='.$cron_type;
-				$template->assign_var('RUN_CRON_TASK', '<img src="' . $url . '" width="1" height="1" alt="cron" />');
+				$url = append_sid('../cron.'.$phpEx).'&cron_type='.$cron_type;
+				$template->assign_var('RUN_CRON_TASK', '<img src="' . $url . '" width="1" height="1" alt="" />');
 				meta_refresh(60, $this->u_action . '&amp;sk=' . $sk . '&amp;sd='. $sd);
 			}
 
@@ -184,7 +184,13 @@ class cronstatus_module
 					));
 				}
 			}
-			$template->assign_vars(array('U_ACTION' => $this->u_action, 'U_NAME' => $sk, 'U_SORT' => $sd, 'VIEW_TABLE' => $view_table));
+			$template->assign_vars(array(
+				'U_ACTION'		=> $this->u_action,
+				'U_NAME'		=> $sk,
+				'U_SORT'		=> $sd,
+				'CRON_URL'		=> append_sid('../cron.'.$phpEx).'&cron_type=',
+				'VIEW_TABLE'	=> $view_table
+			));
 		}
 	}
 
