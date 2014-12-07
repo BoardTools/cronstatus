@@ -48,11 +48,11 @@ $lang = array_merge($lang, array(
 
 // Description of Cron Status extension
 $lang = array_merge($lang, array(
-	'CRONSTATUS_DESCRIPTION_PAGE'				=> 'Cron Status page',
-	'CRONSTATUS_DESCRIPTION_PAGE_OVERVIEW'		=> 'Overview of Cron Jobs (with sorting)',
-	'CRONSTATUS_DESCRIPTION_PAGE_STATUS'		=> 'Displays the status of each Cron Task',
-	'CRONSTATUS_DESCRIPTION_PAGE_ABILITY'		=> 'You can run any ready task manually',
-	'CRONSTATUS_DESCRIPTION_NOTICE'				=> 'Cron Status Notice (optional)',
-	'CRONSTATUS_DESCRIPTION_NOTICE_OVERVIEW'	=> 'Is displayed on the main page of the ACP when cron is locked',
-	'CRONSTATUS_DESCRIPTION_NOTICE_SETTINGS'	=> 'Can be switched off in Board settings',
+	'CRONSTATUS_DESCRIPTION_PAGE'				=> 'Cron Status pagina',
+	'CRONSTATUS_DESCRIPTION_PAGE_OVERVIEW'		=> 'Overzicht van taken (met sortering)',
+	'CRONSTATUS_DESCRIPTION_PAGE_STATUS'		=> 'Toon de status van iedere taak',
+	'CRONSTATUS_DESCRIPTION_PAGE_ABILITY'		=> 'Stark een taak manueel',
+	'CRONSTATUS_DESCRIPTION_NOTICE'				=> 'Cron Status Melding (optioneel)',
+	'CRONSTATUS_DESCRIPTION_NOTICE_OVERVIEW'	=> 'Melding op hoofdpagina ACP als taak is geblokkeerd',
+	'CRONSTATUS_DESCRIPTION_NOTICE_SETTINGS'	=> 'Kanuitgeschakeld worden in Forum instellingen',
 ));
