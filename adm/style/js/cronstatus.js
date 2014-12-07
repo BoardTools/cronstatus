@@ -75,7 +75,7 @@
 	function run_cron(event) {
 		cron_run = this;
 		var cron_task = this.id;
-		$("#run_cron_task").attr("src", "../cron.php?cron_type=" + cron_task);
+		$("#run_cron_task").attr("src", cron_url + cron_task);
 		$(".cron_run").css("display", "none");
 		$(this).next().css("display", "block");
 		time = 10;

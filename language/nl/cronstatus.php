@@ -45,3 +45,14 @@ $lang = array_merge($lang, array(
 	'CRON_TASK_RUN'						=> 'Run',
 	'CRON_TASK_RUNNING'					=> 'Running...',
 ));
+
+// Description of Cron Status extension
+$lang = array_merge($lang, array(
+	'CRONSTATUS_DESCRIPTION_PAGE'				=> 'Cron Status pagina',
+	'CRONSTATUS_DESCRIPTION_PAGE_OVERVIEW'		=> 'Overzicht van taken (met sortering)',
+	'CRONSTATUS_DESCRIPTION_PAGE_STATUS'		=> 'Toon de status van iedere taak',
+	'CRONSTATUS_DESCRIPTION_PAGE_ABILITY'		=> 'Stark een taak manueel',
+	'CRONSTATUS_DESCRIPTION_NOTICE'				=> 'Cron Status Melding (optioneel)',
+	'CRONSTATUS_DESCRIPTION_NOTICE_OVERVIEW'	=> 'Melding op hoofdpagina ACP als taak is geblokkeerd',
+	'CRONSTATUS_DESCRIPTION_NOTICE_SETTINGS'	=> 'Kanuitgeschakeld worden in Forum instellingen',
+));
