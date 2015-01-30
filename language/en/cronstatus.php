@@ -18,6 +18,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
+	'CRON'								=> 'Cron',
 	'CRON_LOCKED'						=> 'Cron Locked',
 	'CRON_TIME_LOCKED'					=> 'Cron time locked',
 	'ACP_CRON_STATUS_TITLE'				=> 'Cron Status',

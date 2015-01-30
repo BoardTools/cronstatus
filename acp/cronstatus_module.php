@@ -94,7 +94,7 @@ class cronstatus_module
 
 			if (!($request->is_ajax()) && $cron_type)
 			{
-				$url = append_sid('../cron.'.$phpEx).'&cron_type='.$cron_type;
+				$url = append_sid($phpbb_root_path . 'cron.' . $phpEx, 'cron_type=' . $cron_type);
 				$template->assign_var('RUN_CRON_TASK', '<img src="' . $url . '" width="1" height="1" alt="" />');
 				meta_refresh(60, $this->u_action . '&amp;sk=' . $sk . '&amp;sd='. $sd);
 			}
@@ -188,7 +188,7 @@ class cronstatus_module
 				'U_ACTION'		=> $this->u_action,
 				'U_NAME'		=> $sk,
 				'U_SORT'		=> $sd,
-				'CRON_URL'		=> append_sid('../cron.'.$phpEx).'&cron_type=',
+				'CRON_URL'		=> addslashes(append_sid($phpbb_root_path . 'cron.' . $phpEx, false, false)), // This is used in JavaScript (no &amp;)
 				'VIEW_TABLE'	=> $view_table
 			));
 		}
@@ -200,7 +200,7 @@ class cronstatus_module
 		$new_array = array();
 		$sortable_array = array();
 
-		if (count($array) > 0)
+		if (sizeof($array) > 0)
 		{
 			foreach ($array as $k => $v)
 			{

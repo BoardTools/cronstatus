@@ -47,20 +47,21 @@
 		time--;
 	}
 	var interval = setInterval(progress, 1000);
-	
-		$("a.simpledialog").simpleDialog({
-	    opacity: 0.1,
-	    width: '650px',
-		height: '600px'
+
+	$("a.simpledialog").simpleDialog({
+		opacity: 0.1,
+		width: '650px',
+		height: '600px',
+		closeLabel: '&times;'
 	});
 
 	function getISODateTime(d) {
 		var s = function(a,b){return(1e15+a+"").slice(-b)};
-	
+
 		if (typeof d === 'undefined') {
 			d = new Date();
 		};
-	
+
 		// return ISO datetime
 		return  s(d.getDate(),2) + '-' +
 				s(d.getMonth()+1,2) + '-' +
@@ -75,7 +76,7 @@
 	function run_cron(event) {
 		cron_run = this;
 		var cron_task = this.id;
-		$("#run_cron_task").attr("src", cron_url + cron_task);
+		$("#run_cron_task").attr("src", cron_url + "&cron_type=" + cron_task);
 		$(".cron_run").css("display", "none");
 		$(this).next().css("display", "block");
 		time = 10;

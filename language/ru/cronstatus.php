@@ -18,6 +18,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
+	'CRON'								=> 'Cron',
 	'CRON_LOCKED'						=> 'Cron заблокирован',
 	'CRON_TIME_LOCKED'					=> 'Время блокировки cron',
 	'ACP_CRON_STATUS_TITLE'				=> 'Статус Cron',
