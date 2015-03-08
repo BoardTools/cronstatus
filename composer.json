@@ -3,7 +3,7 @@
     "type": "phpbb-extension",
     "description": "Cron Status displays an overview of Board's Cron Jobs in Maintenance module of the ACP. This extension also shows a notification on the main page of the ACP when a cron job is locked (optionally). It shows the time when the cron task started and which cron task was the problem.",
     "homepage": "https://github.com/BoardTools/cronstatus",
-    "version": "3.1.1",
+    "version": "3.1.2-RC",
     "keywords": ["boardtools", "forumhulp", "phpbb", "extension", "cron", "status"],
     "license": "GPL-2.0",
     "authors": [

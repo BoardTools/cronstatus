@@ -157,9 +157,11 @@ class listener implements EventSubscriberInterface
 			"config_value"	=> 86400
 		);
 
+		$last_task_date = 0;
 		if ($this->config['cron_lock'])
 		{
 			$cronlock = $this->maxValueInArray($rows, 'config_value');
+			$last_task_date = $cronlock['config_value'];
 			$cronlock = str_replace(array('_last_gc', 'prune_notifications', 'last_queue_run'), array('', 'read_notification', 'queue_interval'), $cronlock['config_name']);
 		}
 
@@ -167,11 +169,13 @@ class listener implements EventSubscriberInterface
 		* Event to modify cron configuration variables before displaying cron information
 		*
 		* @event boardtools.cronstatus.modify_cron_config
-		* @var	array	rows		Configuration array
-		* @var	string	cronlock	Name of task that released cron lock (in last task date format)
+		* @var	array	rows			Configuration array
+		* @var	string	cronlock		Name of the task that released cron lock (in last task date format)
+		* @var	string	last_task_date	Last task date of the task that released cron lock
 		* @since 3.1.0-RC3
+		* @changed 3.1.2-RC Added last_task_date variable
 		*/
-		$vars = array('rows', 'cronlock');
+		$vars = array('rows', 'cronlock', 'last_task_date');
 		extract($this->phpbb_dispatcher->trigger_event('boardtools.cronstatus.modify_cron_config', compact($vars)));
 
 		return (!$get_last_task) ? $rows : true;
