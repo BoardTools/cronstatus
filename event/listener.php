@@ -121,7 +121,7 @@ class listener implements EventSubscriberInterface
 
 	public function get_cron_tasks(&$cronlock, $get_last_task = false)
 	{
-		$sql = 'SELECT config_name, config_value FROM ' . CONFIG_TABLE . ' WHERE config_name LIKE ' . (($get_last_task) ? '"%_last_gc" OR config_name = "last_queue_run" ORDER BY config_value DESC' : '"%_gc" OR config_name = "last_queue_run" OR config_name = "queue_interval"');
+		$sql = "SELECT config_name, config_value FROM " . CONFIG_TABLE . " WHERE config_name LIKE " . (($get_last_task) ? "'%_last_gc' OR config_name = 'last_queue_run' ORDER BY config_value DESC" : "'%_gc' OR config_name = 'last_queue_run' OR config_name = 'queue_interval'");
 		$result = ($get_last_task) ? $this->db->sql_query_limit($sql, 1) : $this->db->sql_query($sql);
 		$rows = $this->db->sql_fetchrowset($result);
 		$this->db->sql_freeresult($result);
