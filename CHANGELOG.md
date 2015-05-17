@@ -6,6 +6,7 @@ This file contains the list of changes between different versions of Cron Status
 ## Changes since 3.1.1
 ### New features
 * [CODE] New event variable `last_task_date` is now available for developers of Cron Tasks.
+* [CODE] Showing that there is no "next time" scheduled for a Cron Task is allowed.
 * [LANGUAGE] Spanish language package was added.
 * [LANGUAGE] Turkish language package was added.
 * [LANGUAGE] Croatian language package was added.
