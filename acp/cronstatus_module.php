@@ -140,7 +140,8 @@ class cronstatus_module
 						$task_date = ($task_last_gc !== false) ? (int) $task_last_gc : -1;
 					}
 
-					$new_task_date = ($task_date > 0) ? $task_date + $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) : 0;
+					$new_task_interval = ($task_date > 0) ? $this->array_find($name . (($name != 'queue_interval') ? '_gc': ''), $rows) : 0;
+					$new_task_date = ($new_task_interval > 0) ? $task_date + $new_task_interval : 0;
 
 					/**
 					* Event to modify task variables before displaying cron information
@@ -163,7 +164,7 @@ class cronstatus_module
 						'task_date'			=> $task_date,
 						'task_date_print'	=> ($task_date == -1) ? $user->lang['CRON_TASK_AUTO'] : (($task_date) ?	$user->format_date($task_date, $config['cronstatus_dateformat']) : $user->lang['CRON_TASK_NEVER_STARTED']),
 						'new_date'			=> $new_task_date,
-						'new_date_print'	=> ($task_date > 0) ? $user->format_date($new_task_date, $config['cronstatus_dateformat']) : '-',
+						'new_date_print'	=> ($new_task_date > 0) ? $user->format_date($new_task_date, $config['cronstatus_dateformat']) : '-',
 						'task_ok'			=> ($task_date > 0 && ($new_task_date > time())) ? false : true,
 						'locked'			=> ($config['cron_lock'] && $cronlock == $name) ? true : false,
 					);
