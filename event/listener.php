@@ -36,9 +36,9 @@ class listener implements EventSubscriberInterface
 	* @param \phpbb\template\template          $template         Template object
 	* @param \phpbb\db\driver\driver_interface $db               Database driver object
 	* @param \phpbb\cron\manager               $cron_manager     Cron manager object
-	* @param \phpbb\event\dispatcher           $phpbb_dispatcher Event dispatcher object
+	* @param \phpbb\event\dispatcher_interface $phpbb_dispatcher Event dispatcher object
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\user $user, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\cron\manager $cron_manager, \phpbb\event\dispatcher $phpbb_dispatcher)
+	public function __construct(\phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\user $user, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\cron\manager $cron_manager, \phpbb\event\dispatcher_interface $phpbb_dispatcher)
 	{
 		$this->config = $config;
 		$this->helper = $helper;
