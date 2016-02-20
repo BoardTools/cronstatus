@@ -54,6 +54,7 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.acp_main_notice'				=> 'load_cronstatus',
 			'core.acp_board_config_edit_add'	=> 'add_config',
+			'core.cron_run_before'				=> 'log_latest_task',
 		);
 	}
 
@@ -69,8 +70,13 @@ class listener implements EventSubscriberInterface
 
 		$time = explode(' ', $this->config['cron_lock']);
 
-		$cronlock = '';
-		$this->get_cron_tasks($cronlock, true);
+		$cronlock = $this->config['cronstatus_latest_task'];
+
+		// Fall back on the previous method for phpBB <3.1.9
+		if (!$cronlock)
+		{
+			$this->get_cron_tasks($cronlock, true);
+		}
 
 		if ($cronlock)
 		{
@@ -196,5 +202,12 @@ class listener implements EventSubscriberInterface
 			}
 		}
 		return array('config_name' => $currentName , 'config_value' => $currentMax);
+	}
+
+	public function log_latest_task($event)
+	{
+		/** @var \phpbb\cron\task\task $task */
+		$task = $event['task'];
+		$this->config->set('cronstatus_latest_task', $task->get_name());
 	}
 }

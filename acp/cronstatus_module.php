@@ -14,7 +14,7 @@ class cronstatus_module
 	public $u_action;
 	function main($id, $mode)
 	{
-		global $db, $config, $user, $cache, $template, $request, $phpbb_root_path, $phpEx, $phpbb_extension_manager, $phpbb_container, $phpbb_dispatcher;
+		global $config, $user, $template, $request, $phpbb_root_path, $phpEx, $phpbb_extension_manager, $phpbb_container, $phpbb_dispatcher;
 
 		$this->page_title = $user->lang['ACP_CRON_STATUS_TITLE'];
 		$this->tpl_name = 'acp_cronstatus';
@@ -102,8 +102,14 @@ class cronstatus_module
 			$tasks = $task_array = array();
 			$tasks = $phpbb_container->get('cron.manager')->get_tasks();
 
+			// Fall back on the previous method for phpBB <3.1.9
 			$cronlock = '';
 			$rows = $phpbb_container->get('boardtools.cronstatus.listener')->get_cron_tasks($cronlock);
+
+			if ($config['cronstatus_latest_task'])
+			{
+				$cronlock = $config['cronstatus_latest_task'];
+			}
 
 			if (sizeof($tasks) && is_array($rows))
 			{
@@ -186,8 +192,7 @@ class cronstatus_module
 				}
 			}
 			$cron_url = append_sid($phpbb_root_path . 'cron.' . $phpEx, false, false); // This is used in JavaScript (no &amp;).
-			$type_cast_helper = new \phpbb\request\type_cast_helper(); // We need to use a special class because addslashes() is thought to be not valid by EPV.
-			$type_cast_helper->addslashes_recursively($cron_url);
+			addslashes($cron_url);
 			$template->assign_vars(array(
 				'U_ACTION'		=> $this->u_action,
 				'U_NAME'		=> $sk,
@@ -197,7 +202,6 @@ class cronstatus_module
 			));
 		}
 	}
-
 
 	function array_sort($array, $on, $order = SORT_ASC)
 	{

@@ -19,4 +19,4 @@ This file contains the list of changes between different versions of Cron Status
 # Version 3.1.1
 Initial stable release (changes can be found in the commits of our [repository on GitHub](https://github.com/BoardTools/cronstatus)).
 
-© 2014 - 2015 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
+© 2014 - 2016 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
