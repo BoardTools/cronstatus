@@ -1,13 +1,17 @@
 <?php
 /**
 *
-* @package cronstatus
-* @copyright (c) 2014 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+* Cron Status extension for the phpBB Forum Software package.
 * French translation by Galixte (http://www.galixte.com)
+*
+* @copyright (c) 2016 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
+/**
+* DO NOT CHANGE
+*/
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -18,13 +22,29 @@ if (empty($lang) || !is_array($lang))
 	$lang = array();
 }
 
+// DEVELOPERS PLEASE NOTE
+//
+// All language files should use UTF-8 as their encoding and the files must not contain a BOM.
+//
+// Placeholders can now contain order information, e.g. instead of
+// 'Page %s of %s' you can (and should) write 'Page %1$s of %2$s', this allows
+// translators to re-order the output of data while ensuring it remains correct
+//
+// You do not need this where single placeholders are used, e.g. 'Message %d' is fine
+// equally where a string contains only two placeholders which are used to wrap text
+// in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
+//
+// Some characters you may want to copy&paste:
+// ’ « » “ ” …
+//
+
 $lang = array_merge($lang, array(
 	'CRON'								=> 'Cron',
 	'CRON_LOCKED'						=> 'Cron arrêté',
 	'CRON_TIME_LOCKED'					=> 'Temps d’arrêt du Cron',
 	'ACP_CRON_STATUS_TITLE'				=> 'Statut du Cron',
 	'ACP_CRON_STATUS_CONFIG_TITLE'		=> 'Vérifier le statut des tâches du Cron',
-	'ACP_CRON_STATUS_EXPLAIN'			=> 'Voici la page de votre forum phpBB où vous pouvez vérifier le statut des taches du Cron. L’indication "Automatique" concernant la dernière date d’une tâche signifie que la tâche a une option dédiée à la gestion de son temps qui ne peut être reconnue par l’extension « Cron Status ». Une tâche indiquée en rouge signifie qu’elle n’a jamais été exécutée ou qu’il y a un problème. Un verrou rouge signifie que cette tâche est verrouillée par le gestionnaire du Cron et bloque d’autres tâches.',
+	'ACP_CRON_STATUS_EXPLAIN'			=> 'Voici la page de votre forum phpBB où vous pouvez vérifier le statut des tâches du Cron. L’indication « Automatique » concernant la dernière date d’une tâche signifie que la tâche a une option dédiée à la gestion de son temps qui ne peut être reconnue par l’extension « Cron Status ». Une tâche indiquée en rouge signifie qu’elle n’a jamais été exécutée ou qu’il y a un problème. Un verrou rouge signifie que cette tâche est verrouillée par le gestionnaire du Cron et bloque d’autres tâches.',
 	'CRON_STATUS_REFRESH'				=> 'Nombre de secondes avant l’actualisation',
 	'CRON_TASK_LOCKED'					=> 'Tâche du Cron arrêtée',
 	'CRON_STATUS_READY_TASKS'			=> 'Tâches disponibles',
@@ -45,7 +65,7 @@ $lang = array_merge($lang, array(
 	'CRON_STATUS_ERROR_EXPLAIN'			=> 'Une erreur s’est produite lors de l’actualisation de la page.',
 	'CRON_STATUS_DEVELOPERS'			=> 'Développeurs',
 	'CRON_TASK_RUN'						=> 'Exécuter',
-	'CRON_TASK_RUNNING'					=> 'En cours d’exécution ...',
+	'CRON_TASK_RUNNING'					=> 'En cours d’exécution…',
 ));
 
 // Description of Cron Status extension
@@ -56,5 +76,5 @@ $lang = array_merge($lang, array(
 	'CRONSTATUS_DESCRIPTION_PAGE_ABILITY'		=> 'Vous pouvez exécuter manuellement n’importe quelle tâche disponible.',
 	'CRONSTATUS_DESCRIPTION_NOTICE'				=> 'Notification sur le statut du Cron (optionnelle)',
 	'CRONSTATUS_DESCRIPTION_NOTICE_OVERVIEW'	=> 'Est affichée sur la page de l’index de l’administration lorsque le Cron est arrêté.',
-	'CRONSTATUS_DESCRIPTION_NOTICE_SETTINGS'	=> 'Peut être désactivée dans la page « Configuration du forum ».',
+	'CRONSTATUS_DESCRIPTION_NOTICE_SETTINGS'	=> 'Peut être désactivée dans la page « Configuration du forum ».',
 ));
