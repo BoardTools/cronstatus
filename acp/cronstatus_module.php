@@ -15,6 +15,9 @@ class cronstatus_module
 
 	function main($id, $mode)
 	{
+		/** @var \phpbb\config\config $config */
+		/** @var \phpbb\request\request_interface $request */
+		/** @var \phpbb\extension\manager $phpbb_extension_manager */
 		global $config, $user, $template, $request, $phpbb_root_path, $phpEx, $phpbb_extension_manager, $phpbb_container, $phpbb_dispatcher;
 
 		$this->page_title = $user->lang['ACP_CRON_STATUS_TITLE'];
@@ -38,21 +41,40 @@ class cronstatus_module
 
 				$user->add_lang(array('install', 'acp/extensions', 'migrator'));
 				$ext_name = 'boardtools/cronstatus';
-				$md_manager = new \phpbb\extension\metadata_manager($ext_name, $config, $phpbb_extension_manager, $template, $user, $phpbb_root_path);
-				try
+
+				if (version_compare($config['version'], '3.2.0-dev', '>='))
 				{
-					$this->metadata = $md_manager->get_metadata('all');
+					/** @var \phpbb\extension\metadata_manager $md_manager */
+					$md_manager = $phpbb_extension_manager->create_extension_metadata_manager($ext_name);
+
+					if (version_compare($config['version'], '3.2.0', '>'))
+					{
+						$metadata = $md_manager->get_metadata('all');
+						$this->output_metadata_to_template($metadata, $template);
+					}
+					else
+					{
+						$md_manager->output_template_data($template);
+					}
 				}
-				catch (\phpbb\extension\exception $e)
+				else
 				{
-					trigger_error($e, E_USER_WARNING);
+					$md_manager = new \phpbb\extension\metadata_manager($ext_name, $config, $phpbb_extension_manager, $template, $user, $phpbb_root_path);
+					try
+					{
+						$this->metadata = $md_manager->get_metadata('all');
+					}
+					catch (\phpbb\extension\exception $e)
+					{
+						trigger_error($e, E_USER_WARNING);
+					}
+
+					$md_manager->output_template_data();
 				}
 
-				$md_manager->output_template_data();
-
 				try
 				{
-					$updates_available = $this->version_check($md_manager, $request->variable('versioncheck_force', false));
+					$updates_available = $phpbb_extension_manager->version_check($md_manager, $request->variable('versioncheck_force', false), false, $config['extension_force_unstable'] ? 'unstable' : null);
 
 					$template->assign_vars(array(
 						'S_UP_TO_DATE'   => empty($updates_available),
@@ -114,6 +136,7 @@ class cronstatus_module
 
 				if (sizeof($tasks) && is_array($rows))
 				{
+					/** @var \phpbb\cron\task\task $task */
 					foreach ($tasks as $task)
 					{
 						$task_name = $task->get_name();
@@ -204,6 +227,14 @@ class cronstatus_module
 		}
 	}
 
+	/**
+	 * Recursive array sorting based on the second level key
+	 *
+	 * @param array  $array Array to be sorted
+	 * @param string $on    Second level key for sorting
+	 * @param int    $order Sorting direction (SORT_ASC, SORT_DESC)
+	 * @return array
+	 */
 	function array_sort($array, $on, $order = SORT_ASC)
 	{
 		$new_array = array();
@@ -247,7 +278,15 @@ class cronstatus_module
 		return $new_array;
 	}
 
-	// array_search with partial matches
+	/**
+	 * Performs the search for a specific config_name and
+	 * returns the corresponding config_value or false if nothing was found
+	 * Works like array_search with partial matches
+	 *
+	 * @param string $needle   The config_name to search for
+	 * @param array  $haystack The array to search in
+	 * @return mixed
+	 */
 	public function array_find($needle, $haystack)
 	{
 		if (!is_array($haystack))
@@ -265,38 +304,39 @@ class cronstatus_module
 	}
 
 	/**
-	 * Check the version and return the available updates.
+	 * Outputs extension metadata into the template
 	 *
-	 * @param \phpbb\extension\metadata_manager $md_manager   The metadata manager for the version to check.
-	 * @param bool                              $force_update Ignores cached data. Defaults to false.
-	 * @param bool                              $force_cache  Force the use of the cache. Override $force_update.
-	 * @return string
-	 * @throws RuntimeException
+	 * @param array                    $metadata Array with all metadata for the extension
+	 * @param \phpbb\template\template $template phpBB template object
 	 */
-	protected function version_check(\phpbb\extension\metadata_manager $md_manager, $force_update = false, $force_cache = false)
+	public function output_metadata_to_template($metadata, $template)
 	{
-		global $cache, $config, $user;
-		$meta = $md_manager->get_metadata('all');
+		$template->assign_vars(array(
+			'META_NAME'        => $metadata['name'],
+			'META_TYPE'        => $metadata['type'],
+			'META_DESCRIPTION' => (isset($metadata['description'])) ? $metadata['description'] : '',
+			'META_HOMEPAGE'    => (isset($metadata['homepage'])) ? $metadata['homepage'] : '',
+			'META_VERSION'     => $metadata['version'],
+			'META_TIME'        => (isset($metadata['time'])) ? $metadata['time'] : '',
+			'META_LICENSE'     => $metadata['license'],
 
-		if (!isset($meta['extra']['version-check']))
+			'META_REQUIRE_PHP'      => (isset($metadata['require']['php'])) ? $metadata['require']['php'] : '',
+			'META_REQUIRE_PHP_FAIL' => (isset($metadata['require']['php'])) ? false : true,
+
+			'META_REQUIRE_PHPBB'      => (isset($metadata['extra']['soft-require']['phpbb/phpbb'])) ? $metadata['extra']['soft-require']['phpbb/phpbb'] : '',
+			'META_REQUIRE_PHPBB_FAIL' => (isset($metadata['extra']['soft-require']['phpbb/phpbb'])) ? false : true,
+
+			'META_DISPLAY_NAME' => (isset($metadata['extra']['display-name'])) ? $metadata['extra']['display-name'] : '',
+		));
+
+		foreach ($metadata['authors'] as $author)
 		{
-			throw new \RuntimeException($this->user->lang('NO_VERSIONCHECK'), 1);
+			$template->assign_block_vars('meta_authors', array(
+				'AUTHOR_NAME'     => $author['name'],
+				'AUTHOR_EMAIL'    => (isset($author['email'])) ? $author['email'] : '',
+				'AUTHOR_HOMEPAGE' => (isset($author['homepage'])) ? $author['homepage'] : '',
+				'AUTHOR_ROLE'     => (isset($author['role'])) ? $author['role'] : '',
+			));
 		}
-
-		$version_check = $meta['extra']['version-check'];
-
-		if (version_compare($config['version'], '3.1.1', '>'))
-		{
-			$version_helper = new \phpbb\version_helper($cache, $config, new \phpbb\file_downloader(), $user);
-		}
-		else
-		{
-			$version_helper = new \phpbb\version_helper($cache, $config, $user);
-		}
-		$version_helper->set_current_version($meta['version']);
-		$version_helper->set_file_location($version_check['host'], $version_check['directory'], $version_check['filename']);
-		$version_helper->force_stability($config['extension_force_unstable'] ? 'unstable' : null);
-
-		return $updates = $version_helper->get_suggested_updates($force_update, $force_cache);
 	}
 }

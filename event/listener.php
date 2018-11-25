@@ -50,6 +50,11 @@ class listener implements EventSubscriberInterface
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
 	}
 
+	/**
+	 * Assign functions defined in this class to event listeners in the core
+	 *
+	 * @return array
+	 */
 	static public function getSubscribedEvents()
 	{
 		return array(
@@ -59,6 +64,11 @@ class listener implements EventSubscriberInterface
 		);
 	}
 
+	/**
+	 * Displays Cron Status Notice if needed
+	 *
+	 * @param object $event The event object
+	 */
 	public function load_cronstatus($event)
 	{
 		$this->user->add_lang_ext('boardtools/cronstatus', 'cronstatus');
@@ -88,24 +98,11 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	// array_search with partial matches
-	public function array_find($needle, $haystack)
-	{
-		if (!is_array($haystack))
-		{
-			return false;
-		}
-		foreach ($haystack as $item)
-		{
-			$name = $item->get_name();
-			if (strpos($name, $needle) !== false)
-			{
-				return $name;
-			}
-		}
-		return false;
-	}
-
+	/**
+	 * Adds configuration strings for current extension to the ACP
+	 *
+	 * @param object $event The event object
+	 */
 	public function add_config($event)
 	{
 		if ($event['mode'] == 'settings')
@@ -126,6 +123,13 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
+	/**
+	 * Returns configuration parameters for all available Cron tasks
+	 *
+	 * @param string $cronlock      The name of the latest executed Cron task
+	 * @param bool   $get_last_task Calculate the latest executed task only
+	 * @return array|true If $get_last_task is true, true is always returned instead of parameters
+	 */
 	public function get_cron_tasks(&$cronlock, $get_last_task = false)
 	{
 		$sql = "SELECT config_name, config_value FROM " . CONFIG_TABLE . " WHERE config_name LIKE " . (($get_last_task) ? "'%_last_gc' OR config_name = 'last_queue_run' ORDER BY config_value DESC" : "'%_gc' OR config_name = 'last_queue_run' OR config_name = 'queue_interval'");
@@ -188,6 +192,13 @@ class listener implements EventSubscriberInterface
 		return (!$get_last_task) ? $rows : true;
 	}
 
+	/**
+	 * Calculates the maximum value for last date of the cron task execution
+	 *
+	 * @param array  $array       Array of Cron configuration parameters
+	 * @param string $keyToSearch Array key containing last date value
+	 * @return array
+	 */
 	public function maxValueInArray($array, $keyToSearch)
 	{
 		$currentMax = null;
@@ -205,6 +216,11 @@ class listener implements EventSubscriberInterface
 		return array('config_name' => $currentName, 'config_value' => $currentMax);
 	}
 
+	/**
+	 * Logs the name of the latest executed Cron task to the database
+	 *
+	 * @param object $event The event object
+	 */
 	public function log_latest_task($event)
 	{
 		/** @var \phpbb\cron\task\task $task */
