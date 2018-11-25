@@ -1,22 +1,23 @@
 <?php
 /**
-*
-* @package cronstatus
-* @copyright (c) 2014 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package       cronstatus
+ * @copyright (c) 2014 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
+ * @license       http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace boardtools\cronstatus\event;
 
 /**
-* @ignore
-*/
+ * @ignore
+ */
+
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
-* Event listener
-*/
+ * Event listener
+ */
 class listener implements EventSubscriberInterface
 {
 	protected $config;
@@ -28,16 +29,16 @@ class listener implements EventSubscriberInterface
 	protected $phpbb_dispatcher;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\config\config              $config           Config object
-	* @param \phpbb\controller\helper          $helper           Controller helper object
-	* @param \phpbb\user                       $user             User object
-	* @param \phpbb\template\template          $template         Template object
-	* @param \phpbb\db\driver\driver_interface $db               Database driver object
-	* @param \phpbb\cron\manager               $cron_manager     Cron manager object
-	* @param \phpbb\event\dispatcher_interface $phpbb_dispatcher Event dispatcher object
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\config\config              $config           Config object
+	 * @param \phpbb\controller\helper          $helper           Controller helper object
+	 * @param \phpbb\user                       $user             User object
+	 * @param \phpbb\template\template          $template         Template object
+	 * @param \phpbb\db\driver\driver_interface $db               Database driver object
+	 * @param \phpbb\cron\manager               $cron_manager     Cron manager object
+	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher Event dispatcher object
+	 */
 	public function __construct(\phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\user $user, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\cron\manager $cron_manager, \phpbb\event\dispatcher_interface $phpbb_dispatcher)
 	{
 		$this->config = $config;
@@ -52,9 +53,9 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.acp_main_notice'				=> 'load_cronstatus',
-			'core.acp_board_config_edit_add'	=> 'add_config',
-			'core.cron_run_before'				=> 'log_latest_task',
+			'core.acp_main_notice'           => 'load_cronstatus',
+			'core.acp_board_config_edit_add' => 'add_config',
+			'core.cron_run_before'           => 'log_latest_task',
 		);
 	}
 
@@ -82,7 +83,7 @@ class listener implements EventSubscriberInterface
 		{
 			$this->template->assign_vars(array(
 				'CRON_TIME' => (sizeof($time) == 2) ? $this->user->format_date((int) $time[0], $this->config['cronstatus_dateformat']) : false,
-				'CRON_NAME' => $cronlock
+				'CRON_NAME' => $cronlock,
 			));
 		}
 	}
@@ -90,7 +91,7 @@ class listener implements EventSubscriberInterface
 	// array_search with partial matches
 	public function array_find($needle, $haystack)
 	{
-		if(!is_array($haystack))
+		if (!is_array($haystack))
 		{
 			return false;
 		}
@@ -107,18 +108,18 @@ class listener implements EventSubscriberInterface
 
 	public function add_config($event)
 	{
-		if($event['mode'] == 'settings')
+		if ($event['mode'] == 'settings')
 		{
 			$this->user->add_lang_ext('boardtools/cronstatus', 'cronstatus');
 			$display_vars = $event['display_vars'];
 			/* We add a new legend, but we need to search for the last legend instead of hard-coding */
 			$submit_key = array_search('ACP_SUBMIT_CHANGES', $display_vars['vars']);
 			$submit_legend_number = substr($submit_key, 6);
-			$display_vars['vars']['legend'.$submit_legend_number] = 'ACP_CRON_STATUS_TITLE';
+			$display_vars['vars']['legend' . $submit_legend_number] = 'ACP_CRON_STATUS_TITLE';
 			$new_vars = array(
-				'cronstatus_dateformat'	=> array('lang' => 'CRON_STATUS_DATE_FORMAT',	'validate' => 'string',	'type' => 'custom', 'method' => 'dateformat_select', 'explain' => true),
-				'cronstatus_main_notice'	=> array('lang' => 'CRON_STATUS_MAIN_NOTICE',	'validate' => 'bool',	'type' => 'radio:yes_no', 'explain' => true),
-				'legend'.($submit_legend_number + 1)	=> 'ACP_SUBMIT_CHANGES',
+				'cronstatus_dateformat'                => array('lang' => 'CRON_STATUS_DATE_FORMAT', 'validate' => 'string', 'type' => 'custom', 'method' => 'dateformat_select', 'explain' => true),
+				'cronstatus_main_notice'               => array('lang' => 'CRON_STATUS_MAIN_NOTICE', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
+				'legend' . ($submit_legend_number + 1) => 'ACP_SUBMIT_CHANGES',
 			);
 			$display_vars['vars'] = phpbb_insert_config_array($display_vars['vars'], $new_vars, array('after' => $submit_key));
 			$event['display_vars'] = $display_vars;
@@ -136,12 +137,12 @@ class listener implements EventSubscriberInterface
 		$result = $this->db->sql_query_limit($sql, 1);
 		$prune = $this->db->sql_fetchrow($result);
 		$rows[] = array(
-			"config_name"	=> "prune_forum_last_gc", // This is the time of the last Cron Job, not the time of pruned forums.
-			"config_value"	=> $prune['prune_next'] - $prune['prune_time']
+			"config_name"  => "prune_forum_last_gc", // This is the time of the last Cron Job, not the time of pruned forums.
+			"config_value" => $prune['prune_next'] - $prune['prune_time'],
 		);
 		$rows[] = array(
-			"config_name"	=> "prune_forum_gc",
-			"config_value"	=> $prune['prune_time']
+			"config_name"  => "prune_forum_gc",
+			"config_value" => $prune['prune_time'],
 		);
 		$this->db->sql_freeresult($result);
 
@@ -149,18 +150,18 @@ class listener implements EventSubscriberInterface
 		$result = $this->db->sql_query_limit($sql, 1);
 		$prune_shadow = $this->db->sql_fetchrow($result);
 		$rows[] = array(
-			"config_name"	=> "prune_shadow_topics_last_gc", // This is the time of the last Cron Job, not the time of pruned shadow topics.
-			"config_value"	=> $prune_shadow['prune_shadow_next'] - $prune_shadow['prune_shadow_time']
+			"config_name"  => "prune_shadow_topics_last_gc", // This is the time of the last Cron Job, not the time of pruned shadow topics.
+			"config_value" => $prune_shadow['prune_shadow_next'] - $prune_shadow['prune_shadow_time'],
 		);
 		$rows[] = array(
-			"config_name"	=> "prune_shadow_topics_gc",
-			"config_value"	=> $prune_shadow['prune_shadow_time']
+			"config_name"  => "prune_shadow_topics_gc",
+			"config_value" => $prune_shadow['prune_shadow_time'],
 		);
 		$this->db->sql_freeresult($result);
 
 		$rows[] = array(
-			"config_name"	=> "plupload_gc",
-			"config_value"	=> 86400
+			"config_name"  => "plupload_gc",
+			"config_value" => 86400,
 		);
 
 		$last_task_date = 0;
@@ -172,15 +173,15 @@ class listener implements EventSubscriberInterface
 		}
 
 		/**
-		* Event to modify cron configuration variables before displaying cron information
-		*
-		* @event boardtools.cronstatus.modify_cron_config
-		* @var	array	rows			Configuration array
-		* @var	string	cronlock		Name of the task that released cron lock (in last task date format)
-		* @var	string	last_task_date	Last task date of the task that released cron lock
-		* @since 3.1.0-RC3
-		* @changed 3.1.2-RC Added last_task_date variable
-		*/
+		 * Event to modify cron configuration variables before displaying cron information
+		 *
+		 * @event   boardtools.cronstatus.modify_cron_config
+		 * @var    array    rows            Configuration array
+		 * @var    string    cronlock        Name of the task that released cron lock (in last task date format)
+		 * @var    string    last_task_date    Last task date of the task that released cron lock
+		 * @since   3.1.0-RC3
+		 * @changed 3.1.2-RC Added last_task_date variable
+		 */
 		$vars = array('rows', 'cronlock', 'last_task_date');
 		extract($this->phpbb_dispatcher->trigger_event('boardtools.cronstatus.modify_cron_config', compact($vars)));
 
@@ -190,9 +191,9 @@ class listener implements EventSubscriberInterface
 	public function maxValueInArray($array, $keyToSearch)
 	{
 		$currentMax = null;
-		foreach($array as $arr)
+		foreach ($array as $arr)
 		{
-			foreach($arr as $key => $value)
+			foreach ($arr as $key => $value)
 			{
 				if (($key == $keyToSearch) && ($value >= $currentMax) && ((strrpos($arr['config_name'], '_last_gc') === strlen($arr['config_name']) - 8) || $arr['config_name'] === 'last_queue_run'))
 				{
@@ -201,7 +202,7 @@ class listener implements EventSubscriberInterface
 				}
 			}
 		}
-		return array('config_name' => $currentName , 'config_value' => $currentMax);
+		return array('config_name' => $currentName, 'config_value' => $currentMax);
 	}
 
 	public function log_latest_task($event)

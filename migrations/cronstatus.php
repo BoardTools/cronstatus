@@ -1,11 +1,11 @@
 <?php
 /**
-*
-* @package cronstatus
-* @copyright (c) 2014 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package       cronstatus
+ * @copyright (c) 2014 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
+ * @license       http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace boardtools\cronstatus\migrations;
 
@@ -31,9 +31,9 @@ class cronstatus extends \phpbb\db\migration\migration
 			array('module.add', array('acp', 'ACP_CAT_MAINTENANCE', 'ACP_CRON_STATUS_TITLE')),
 			array('module.add', array(
 				'acp', 'ACP_CRON_STATUS_TITLE', array(
-					'module_basename'	=> '\boardtools\cronstatus\acp\cronstatus_module',
-					'auth'				=> 'ext_boardtools/cronstatus',
-					'modes'				=> array('config'),
+					'module_basename' => '\boardtools\cronstatus\acp\cronstatus_module',
+					'auth'            => 'ext_boardtools/cronstatus',
+					'modes'           => array('config'),
 				),
 			)),
 		);

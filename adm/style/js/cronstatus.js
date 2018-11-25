@@ -1,9 +1,10 @@
-; (function ($, window, document) {
+;(function($, window, document) {
 	// do stuff here and use $, window and document safely
 	// https://www.phpbb.com/community/viewtopic.php?p=13589106#p13589106
 	$(".cron_run_link").css("display", "none");
 	$("#ProgressStatus, #circle, .cron_run").css("display", "block");
 	var time = 59;
+
 	function progress() {
 		var element = $('#ProgressStatus');
 		var circle = $('#circle');
@@ -18,7 +19,7 @@
 			$.ajax({
 				url: window.location.href + "&table=true",
 				context: document.getElementById("cron_table"),
-				error: function (e, text, ee) {
+				error: function(e, text, ee) {
 					circle.css("display", "none");
 					if (text == "timeout") {
 						$("#LoadErrorTimeout").css("display", "inline-block");
@@ -28,7 +29,7 @@
 						$("#LoadError").css("display", "block");
 					}
 				},
-				success: function (s, x) {
+				success: function(s, x) {
 					element.css("right", "8px");
 					element.html(60);
 					time = 59;
@@ -46,6 +47,7 @@
 		}
 		time--;
 	}
+
 	var interval = setInterval(progress, 1000);
 
 	$("a.simpledialog").simpleDialog({
@@ -56,20 +58,22 @@
 	});
 
 	function getISODateTime(d) {
-		var s = function(a,b){return(1e15+a+"").slice(-b)};
+		var s = function(a, b) {
+			return (1e15 + a + "").slice(-b)
+		};
 
 		if (typeof d === 'undefined') {
 			d = new Date();
-		};
-
+		}
 		// return ISO datetime
-		return  s(d.getDate(),2) + '-' +
-				s(d.getMonth()+1,2) + '-' +
-				d.getFullYear() + ' ' +
-				s(d.getHours(),2) + ':' +
-				s(d.getMinutes(),2) + ':' +
-				s(d.getSeconds(),2);
+		return s(d.getDate(), 2) + '-' +
+			s(d.getMonth() + 1, 2) + '-' +
+			d.getFullYear() + ' ' +
+			s(d.getHours(), 2) + ':' +
+			s(d.getMinutes(), 2) + ':' +
+			s(d.getSeconds(), 2);
 	}
+
 	// For immediate display
 	$('#date').text(getISODateTime());
 
@@ -81,5 +85,6 @@
 		$(this).next().css("display", "block");
 		time = 10;
 	}
+
 	$(".cron_run").bind("click", run_cron);
 })(jQuery, window, document);
