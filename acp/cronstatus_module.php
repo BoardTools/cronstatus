@@ -34,6 +34,8 @@ class cronstatus_module
 			$config->set("cronstatus_default_sort", $sk . "|" . $sd);
 		}
 
+		$template->assign_var('FONTAWESOME_NEEDED', version_compare($config['version'], '3.2.0', '<'));
+
 		$action = $request->variable('action', '');
 		switch ($action)
 		{
