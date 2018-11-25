@@ -178,13 +178,13 @@ class cronstatus_module
 						/**
 						 * Event to modify task variables before displaying cron information
 						 *
-						 * @event   boardtools.cronstatus.modify_cron_task
-						 * @var    object    task            Task object
-						 * @var    object    task_name        Task name ($task->get_name())
-						 * @var    object    name            Task name for new task date
-						 * @var    object    task_date        Last task date
-						 * @var    object    new_task_date    Next task date
-						 * @since   3.1.0-RC3
+						 * @event boardtools.cronstatus.modify_cron_task
+						 * @var object task          Task object
+						 * @var object task_name     Task name ($task->get_name())
+						 * @var object name          Task name for new task date
+						 * @var object task_date     Last task date
+						 * @var object new_task_date Next task date
+						 * @since 3.1.0-RC3
 						 * @changed 3.1.1 Added new_task_date variable
 						 */
 						$vars = array('task', 'task_name', 'name', 'task_date', 'new_task_date');

@@ -179,11 +179,11 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Event to modify cron configuration variables before displaying cron information
 		 *
-		 * @event   boardtools.cronstatus.modify_cron_config
-		 * @var    array    rows            Configuration array
-		 * @var    string    cronlock        Name of the task that released cron lock (in last task date format)
-		 * @var    string    last_task_date    Last task date of the task that released cron lock
-		 * @since   3.1.0-RC3
+		 * @event boardtools.cronstatus.modify_cron_config
+		 * @var array  rows           Configuration array
+		 * @var string cronlock       Name of the task that released cron lock (in last task date format)
+		 * @var string last_task_date Last task date of the task that released cron lock
+		 * @since 3.1.0-RC3
 		 * @changed 3.1.2-RC Added last_task_date variable
 		 */
 		$vars = array('rows', 'cronlock', 'last_task_date');
