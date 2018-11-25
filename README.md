@@ -53,4 +53,4 @@ For permanent uninstallation click `Delete Data` and then you can safely delete 
 ## License
 [GNU General Public License v2](http://opensource.org/licenses/GPL-2.0)
 
-© 2014 - John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
+© 2014 - 2018 Igor Lavrov and John Peskens

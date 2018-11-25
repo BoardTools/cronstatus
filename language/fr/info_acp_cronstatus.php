@@ -4,7 +4,7 @@
  * Cron Status extension for the phpBB Forum Software package.
  * French translation by Galixte (http://www.galixte.com)
  *
- * @copyright (c) 2016 John Peskens (http://ForumHulp.com) and Igor Lavrov (https://github.com/LavIgor)
+ * @copyright (c) 2014 - 2018 Igor Lavrov and John Peskens
  * @license       http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */

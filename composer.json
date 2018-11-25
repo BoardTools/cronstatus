@@ -1,46 +1,46 @@
 {
-  "name": "boardtools/cronstatus",
-  "type": "phpbb-extension",
-  "description": "Cron Status displays an overview of Board's Cron Jobs in Maintenance module of the ACP. This extension also shows a notification on the main page of the ACP when a cron job is locked (optionally). It shows the time when the cron task started and which cron task was the problem.",
-  "homepage": "https://github.com/BoardTools/cronstatus",
-  "version": "3.1.3-dev",
-  "keywords": [
-    "boardtools",
-    "forumhulp",
-    "phpbb",
-    "extension",
-    "cron",
-    "status"
-  ],
-  "license": "GPL-2.0",
-  "authors": [
-    {
-      "name": "John Peskens",
-      "homepage": "http://forumhulp.com",
-      "email": "info@forumhulp.com",
-      "role": "Developer"
-    },
-    {
-      "name": "Igor Lavrov",
-      "homepage": "https://github.com/lavigor",
-      "role": "Developer"
-    }
-  ],
-  "require": {
-    "php": ">=5.3.3"
-  },
-  "require-dev": {
-    "phpbb/epv": "dev-master"
-  },
-  "extra": {
-    "display-name": "Cron Status",
-    "soft-require": {
-      "phpbb/phpbb": ">=3.1.0"
-    },
-    "version-check": {
-      "host": "boardtools.github.io",
-      "directory": "/cronstatus",
-      "filename": "cronstatus.json"
-    }
-  }
+	"name": "boardtools/cronstatus",
+	"type": "phpbb-extension",
+	"description": "Cron Status displays an overview of Board's Cron Jobs in Maintenance module of the ACP. This extension also shows a notification on the main page of the ACP when a cron job is locked (optionally). It shows the time when the cron task started and which cron task was the problem.",
+	"homepage": "https://github.com/BoardTools/cronstatus",
+	"version": "3.1.3-dev",
+	"keywords": [
+		"boardtools",
+		"forumhulp",
+		"phpbb",
+		"extension",
+		"cron",
+		"status"
+	],
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "Igor Lavrov",
+			"homepage": "https://github.com/lavigor",
+			"role": "Developer"
+		},
+		{
+			"name": "John Peskens",
+			"homepage": "http://forumhulp.com",
+			"email": "info@forumhulp.com",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.3.3"
+	},
+	"require-dev": {
+		"phpbb/epv": "dev-master"
+	},
+	"extra": {
+		"display-name": "Cron Status",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.1.0"
+		},
+		"version-check": {
+			"host": "boardtools.github.io",
+			"directory": "/cronstatus",
+			"filename": "cronstatus.json"
+		}
+	}
 }
