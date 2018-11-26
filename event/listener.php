@@ -201,7 +201,7 @@ class listener implements EventSubscriberInterface
 	 */
 	public function maxValueInArray($array, $keyToSearch)
 	{
-		$currentMax = null;
+		$currentName = $currentMax = null;
 		foreach ($array as $arr)
 		{
 			foreach ($arr as $key => $value)

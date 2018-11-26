@@ -11,7 +11,7 @@ namespace boardtools\cronstatus\acp;
 
 class cronstatus_info
 {
-	function module()
+	public function module()
 	{
 		return array(
 			'filename' => 'boardtools\cronstatus\acp\cronstatus_module',
@@ -27,11 +27,11 @@ class cronstatus_info
 		);
 	}
 
-	function install()
+	public function install()
 	{
 	}
 
-	function uninstall()
+	public function uninstall()
 	{
 	}
 }

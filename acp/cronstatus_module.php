@@ -11,15 +11,21 @@ namespace boardtools\cronstatus\acp;
 
 class cronstatus_module
 {
+	/** @var cronstatus_helper */
+	public $helper;
 	public $u_action;
+	public $page_title;
+	public $tpl_name;
+	public $metadata;
 
-	function main($id, $mode)
+	public function main($id, $mode)
 	{
 		/** @var \phpbb\config\config $config */
 		/** @var \phpbb\request\request_interface $request */
 		/** @var \phpbb\extension\manager $phpbb_extension_manager */
 		global $config, $user, $template, $request, $phpbb_root_path, $phpEx, $phpbb_extension_manager, $phpbb_container, $phpbb_dispatcher;
 
+		$this->helper = new cronstatus_helper();
 		$this->page_title = $user->lang['ACP_CRON_STATUS_TITLE'];
 		$this->tpl_name = 'acp_cronstatus';
 		$user->add_lang_ext('boardtools/cronstatus', 'cronstatus');
@@ -40,7 +46,6 @@ class cronstatus_module
 		switch ($action)
 		{
 			case 'details':
-
 				$user->add_lang(array('install', 'acp/extensions', 'migrator'));
 				$ext_name = 'boardtools/cronstatus';
 
@@ -52,7 +57,7 @@ class cronstatus_module
 					if (version_compare($config['version'], '3.2.0', '>'))
 					{
 						$metadata = $md_manager->get_metadata('all');
-						$this->output_metadata_to_template($metadata, $template);
+						$this->helper->output_metadata_to_template($metadata, $template);
 					}
 					else
 					{
@@ -124,7 +129,7 @@ class cronstatus_module
 					meta_refresh(60, $this->u_action . '&amp;sk=' . $sk . '&amp;sd=' . $sd);
 				}
 
-				$tasks = $task_array = array();
+				$task_array = array();
 				$tasks = $phpbb_container->get('cron.manager')->get_tasks();
 
 				// Fall back on the previous method for phpBB <3.1.9
@@ -147,44 +152,43 @@ class cronstatus_module
 							continue;
 						}
 
-						$task_date = -1;
 						$find = strpos($task_name, 'tidy');
 						if ($find !== false)
 						{
 							$name = substr($task_name, $find + 5);
 							$name = ($name == 'sessions') ? 'session' : $name;
-							$task_date = (int) $this->array_find($name . '_last_gc', $rows);
+							$task_date = (int) $this->helper->array_find($name . '_last_gc', $rows);
 						}
 						else if (strpos($task_name, 'prune_notifications'))
 						{
-							$task_date = (int) $this->array_find('read_notification_last_gc', $rows);
+							$task_date = (int) $this->helper->array_find('read_notification_last_gc', $rows);
 							$name = 'read_notification';
 						}
 						else if (strpos($task_name, 'queue'))
 						{
-							$task_date = (int) $this->array_find('last_queue_run', $rows);
+							$task_date = (int) $this->helper->array_find('last_queue_run', $rows);
 							$name = 'queue_interval';
 						}
 						else
 						{
 							$name = (strrpos($task_name, ".") !== false) ? substr($task_name, strrpos($task_name, ".") + 1) : $task_name;
-							$task_last_gc = $this->array_find($name . '_last_gc', $rows);
+							$task_last_gc = $this->helper->array_find($name . '_last_gc', $rows);
 							$task_date = ($task_last_gc !== false) ? (int) $task_last_gc : -1;
 						}
 
-						$new_task_interval = ($task_date > 0) ? $this->array_find($name . (($name != 'queue_interval') ? '_gc' : ''), $rows) : 0;
+						$new_task_interval = ($task_date > 0) ? $this->helper->array_find($name . (($name != 'queue_interval') ? '_gc' : ''), $rows) : 0;
 						$new_task_date = ($new_task_interval > 0) ? $task_date + $new_task_interval : 0;
 
 						/**
 						 * Event to modify task variables before displaying cron information
 						 *
-						 * @event boardtools.cronstatus.modify_cron_task
+						 * @event   boardtools.cronstatus.modify_cron_task
 						 * @var object task          Task object
 						 * @var object task_name     Task name ($task->get_name())
 						 * @var object name          Task name for new task date
 						 * @var object task_date     Last task date
 						 * @var object new_task_date Next task date
-						 * @since 3.1.0-RC3
+						 * @since   3.1.0-RC3
 						 * @changed 3.1.1 Added new_task_date variable
 						 */
 						$vars = array('task', 'task_name', 'name', 'task_date', 'new_task_date');
@@ -203,7 +207,7 @@ class cronstatus_module
 					}
 					unset($tasks, $rows);
 
-					$task_array = $this->array_sort($task_array, $sk, (($sd == 'a') ? SORT_ASC : SORT_DESC));
+					$task_array = $this->helper->array_sort($task_array, $sk, (($sd == 'a') ? SORT_ASC : SORT_DESC));
 
 					foreach ($task_array as $row)
 					{
@@ -217,128 +221,13 @@ class cronstatus_module
 						));
 					}
 				}
-				$cron_url = append_sid($phpbb_root_path . 'cron.' . $phpEx, false, false); // This is used in JavaScript (no &amp;).
-				addslashes($cron_url);
 				$template->assign_vars(array(
 					'U_ACTION'   => $this->u_action,
 					'U_NAME'     => $sk,
 					'U_SORT'     => $sd,
-					'CRON_URL'   => $cron_url,
+					'CRON_URL'   => addslashes(append_sid($phpbb_root_path . 'cron.' . $phpEx, false, false)), // This is used in JavaScript (no &amp;)
 					'VIEW_TABLE' => $view_table,
 				));
-		}
-	}
-
-	/**
-	 * Recursive array sorting based on the second level key
-	 *
-	 * @param array  $array Array to be sorted
-	 * @param string $on    Second level key for sorting
-	 * @param int    $order Sorting direction (SORT_ASC, SORT_DESC)
-	 * @return array
-	 */
-	function array_sort($array, $on, $order = SORT_ASC)
-	{
-		$new_array = array();
-		$sortable_array = array();
-
-		if (sizeof($array) > 0)
-		{
-			foreach ($array as $k => $v)
-			{
-				if (is_array($v))
-				{
-					foreach ($v as $k2 => $v2)
-					{
-						if ($k2 == $on)
-						{
-							$sortable_array[$k] = $v2;
-						}
-					}
-				}
-				else
-				{
-					$sortable_array[$k] = $v;
-				}
-			}
-
-			switch ($order)
-			{
-				case SORT_ASC:
-					asort($sortable_array);
-				break;
-				case SORT_DESC:
-					arsort($sortable_array);
-				break;
-			}
-
-			foreach ($sortable_array as $k => $v)
-			{
-				$new_array[$k] = $array[$k];
-			}
-		}
-		return $new_array;
-	}
-
-	/**
-	 * Performs the search for a specific config_name and
-	 * returns the corresponding config_value or false if nothing was found
-	 * Works like array_search with partial matches
-	 *
-	 * @param string $needle   The config_name to search for
-	 * @param array  $haystack The array to search in
-	 * @return mixed
-	 */
-	public function array_find($needle, $haystack)
-	{
-		if (!is_array($haystack))
-		{
-			return false;
-		}
-		foreach ($haystack as $key => $item)
-		{
-			if (strpos($item['config_name'], $needle) !== false)
-			{
-				return $haystack[$key]['config_value'];
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Outputs extension metadata into the template
-	 *
-	 * @param array                    $metadata Array with all metadata for the extension
-	 * @param \phpbb\template\template $template phpBB template object
-	 */
-	public function output_metadata_to_template($metadata, $template)
-	{
-		$template->assign_vars(array(
-			'META_NAME'        => $metadata['name'],
-			'META_TYPE'        => $metadata['type'],
-			'META_DESCRIPTION' => (isset($metadata['description'])) ? $metadata['description'] : '',
-			'META_HOMEPAGE'    => (isset($metadata['homepage'])) ? $metadata['homepage'] : '',
-			'META_VERSION'     => $metadata['version'],
-			'META_TIME'        => (isset($metadata['time'])) ? $metadata['time'] : '',
-			'META_LICENSE'     => $metadata['license'],
-
-			'META_REQUIRE_PHP'      => (isset($metadata['require']['php'])) ? $metadata['require']['php'] : '',
-			'META_REQUIRE_PHP_FAIL' => (isset($metadata['require']['php'])) ? false : true,
-
-			'META_REQUIRE_PHPBB'      => (isset($metadata['extra']['soft-require']['phpbb/phpbb'])) ? $metadata['extra']['soft-require']['phpbb/phpbb'] : '',
-			'META_REQUIRE_PHPBB_FAIL' => (isset($metadata['extra']['soft-require']['phpbb/phpbb'])) ? false : true,
-
-			'META_DISPLAY_NAME' => (isset($metadata['extra']['display-name'])) ? $metadata['extra']['display-name'] : '',
-		));
-
-		foreach ($metadata['authors'] as $author)
-		{
-			$template->assign_block_vars('meta_authors', array(
-				'AUTHOR_NAME'     => $author['name'],
-				'AUTHOR_EMAIL'    => (isset($author['email'])) ? $author['email'] : '',
-				'AUTHOR_HOMEPAGE' => (isset($author['homepage'])) ? $author['homepage'] : '',
-				'AUTHOR_ROLE'     => (isset($author['role'])) ? $author['role'] : '',
-			));
 		}
 	}
 }
