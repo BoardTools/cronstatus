@@ -47,20 +47,6 @@ class cronstatus_module
 		{
 			case 'details':
 				$this->show_details($user, $request, $config, $phpbb_extension_manager, $template, $phpbb_root_path);
-
-				if ($request->is_ajax())
-				{
-					$template->assign_vars(array(
-						'IS_AJAX' => true,
-					));
-				}
-				else
-				{
-					$template->assign_vars(array(
-						'U_BACK' => $this->u_action,
-					));
-				}
-
 				$this->tpl_name = 'acp_ext_details';
 			break;
 
@@ -242,6 +228,19 @@ class cronstatus_module
 			$template->assign_vars(array(
 				'S_VERSIONCHECK_STATUS'    => $e->getCode(),
 				'VERSIONCHECK_FAIL_REASON' => ($e->getMessage() !== $user->lang('VERSIONCHECK_FAIL')) ? $e->getMessage() : '',
+			));
+		}
+
+		if ($request->is_ajax())
+		{
+			$template->assign_vars(array(
+				'IS_AJAX' => true,
+			));
+		}
+		else
+		{
+			$template->assign_vars(array(
+				'U_BACK' => $this->u_action,
 			));
 		}
 	}
