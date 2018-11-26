@@ -239,30 +239,8 @@ class cronstatus_module
 			return;
 		}
 
-		$find = strpos($task_name, 'tidy');
-		if ($find !== false)
-		{
-			$name = substr($task_name, $find + 5);
-			$name = ($name == 'sessions') ? 'session' : $name;
-			$task_date = (int) $this->helper->array_find($name . '_last_gc', $rows);
-		}
-		else if (strpos($task_name, 'prune_notifications'))
-		{
-			$task_date = (int) $this->helper->array_find('read_notification_last_gc', $rows);
-			$name = 'read_notification';
-		}
-		else if (strpos($task_name, 'queue'))
-		{
-			$task_date = (int) $this->helper->array_find('last_queue_run', $rows);
-			$name = 'queue_interval';
-		}
-		else
-		{
-			$name = (strrpos($task_name, ".") !== false) ? substr($task_name, strrpos($task_name, ".") + 1) : $task_name;
-			$task_last_gc = $this->helper->array_find($name . '_last_gc', $rows);
-			$task_date = ($task_last_gc !== false) ? (int) $task_last_gc : -1;
-		}
-
+		$name = $task_name;
+		$this->helper->get_task_params($rows, $name, $task_date);
 		$new_task_date = $this->helper->get_new_task_date($rows, $task_date, $name);
 
 		/**

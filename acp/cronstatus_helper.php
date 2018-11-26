@@ -125,6 +125,40 @@ class cronstatus_helper
 	}
 
 	/**
+	 * Identifies current Cron task's name and the time of its last execution
+	 *
+	 * @param array   $rows      Array with fetched parameters for Cron tasks
+	 * @param string &$name      Current Cron task's name (to be properly formatted)
+	 * @param int    &$task_date Current Cron task's time of its last execution
+	 */
+	public function get_task_params(array $rows, &$name, &$task_date)
+	{
+		$find = strpos($name, 'tidy');
+		if ($find !== false)
+		{
+			$name = substr($name, $find + 5);
+			$name = ($name == 'sessions') ? 'session' : $name;
+			$task_date = (int) $this->array_find($name . '_last_gc', $rows);
+		}
+		else if (strpos($name, 'prune_notifications'))
+		{
+			$task_date = (int) $this->array_find('read_notification_last_gc', $rows);
+			$name = 'read_notification';
+		}
+		else if (strpos($name, 'queue'))
+		{
+			$task_date = (int) $this->array_find('last_queue_run', $rows);
+			$name = 'queue_interval';
+		}
+		else
+		{
+			$name = (strrpos($name, ".") !== false) ? substr($name, strrpos($name, ".") + 1) : $name;
+			$task_last_gc = $this->array_find($name . '_last_gc', $rows);
+			$task_date = ($task_last_gc !== false) ? (int) $task_last_gc : -1;
+		}
+	}
+
+	/**
 	 * Calculates next time for Cron task execution
 	 *
 	 * @param array  $rows      Array with fetched parameters for Cron tasks
