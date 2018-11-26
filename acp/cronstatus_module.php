@@ -46,61 +46,7 @@ class cronstatus_module
 		switch ($action)
 		{
 			case 'details':
-				$user->add_lang(array('install', 'acp/extensions', 'migrator'));
-				$ext_name = 'boardtools/cronstatus';
-
-				if (version_compare($config['version'], '3.2.0-dev', '>='))
-				{
-					/** @var \phpbb\extension\metadata_manager $md_manager */
-					$md_manager = $phpbb_extension_manager->create_extension_metadata_manager($ext_name);
-
-					if (version_compare($config['version'], '3.2.0', '>'))
-					{
-						$metadata = $md_manager->get_metadata('all');
-						$this->helper->output_metadata_to_template($metadata, $template);
-					}
-					else
-					{
-						$md_manager->output_template_data($template);
-					}
-				}
-				else
-				{
-					$md_manager = new \phpbb\extension\metadata_manager($ext_name, $config, $phpbb_extension_manager, $template, $user, $phpbb_root_path);
-					try
-					{
-						$this->metadata = $md_manager->get_metadata('all');
-					}
-					catch (\phpbb\extension\exception $e)
-					{
-						trigger_error($e, E_USER_WARNING);
-					}
-
-					$md_manager->output_template_data();
-				}
-
-				try
-				{
-					$updates_available = $phpbb_extension_manager->version_check($md_manager, $request->variable('versioncheck_force', false), false, $config['extension_force_unstable'] ? 'unstable' : null);
-
-					$template->assign_vars(array(
-						'S_UP_TO_DATE'   => empty($updates_available),
-						'S_VERSIONCHECK' => true,
-						'UP_TO_DATE_MSG' => $user->lang(empty($updates_available) ? 'UP_TO_DATE' : 'NOT_UP_TO_DATE', $md_manager->get_metadata('display-name')),
-					));
-
-					foreach ($updates_available as $branch => $version_data)
-					{
-						$template->assign_block_vars('updates_available', $version_data);
-					}
-				}
-				catch (\RuntimeException $e)
-				{
-					$template->assign_vars(array(
-						'S_VERSIONCHECK_STATUS'    => $e->getCode(),
-						'VERSIONCHECK_FAIL_REASON' => ($e->getMessage() !== $user->lang('VERSIONCHECK_FAIL')) ? $e->getMessage() : '',
-					));
-				}
+				$this->show_details($user, $request, $config, $phpbb_extension_manager, $template, $phpbb_root_path);
 
 				if ($request->is_ajax())
 				{
@@ -228,6 +174,75 @@ class cronstatus_module
 					'CRON_URL'   => addslashes(append_sid($phpbb_root_path . 'cron.' . $phpEx, false, false)), // This is used in JavaScript (no &amp;)
 					'VIEW_TABLE' => $view_table,
 				));
+		}
+	}
+
+	/**
+	 * Assigns template parameters for details page
+	 *
+	 * @param \phpbb\user                      $user                    User object
+	 * @param \phpbb\request\request_interface $request                 Request object
+	 * @param \phpbb\config\config             $config                  Config object
+	 * @param \phpbb\extension\manager         $phpbb_extension_manager Extension manager object
+	 * @param \phpbb\template\template         $template                Template object
+	 * @param string                           $phpbb_root_path         Path to phpBB root directory
+	 */
+	public function show_details(\phpbb\user $user, \phpbb\request\request_interface $request, \phpbb\config\config $config, \phpbb\extension\manager $phpbb_extension_manager, \phpbb\template\template $template, $phpbb_root_path)
+	{
+		$user->add_lang(array('install', 'acp/extensions', 'migrator'));
+		$ext_name = 'boardtools/cronstatus';
+
+		if (version_compare($config['version'], '3.2.0-dev', '>='))
+		{
+			/** @var \phpbb\extension\metadata_manager $md_manager */
+			$md_manager = $phpbb_extension_manager->create_extension_metadata_manager($ext_name);
+
+			if (version_compare($config['version'], '3.2.0', '>'))
+			{
+				$metadata = $md_manager->get_metadata('all');
+				$this->helper->output_metadata_to_template($metadata, $template);
+			}
+			else
+			{
+				$md_manager->output_template_data($template);
+			}
+		}
+		else
+		{
+			$md_manager = new \phpbb\extension\metadata_manager($ext_name, $config, $phpbb_extension_manager, $template, $user, $phpbb_root_path);
+			try
+			{
+				$this->metadata = $md_manager->get_metadata('all');
+			}
+			catch (\phpbb\extension\exception $e)
+			{
+				trigger_error($e, E_USER_WARNING);
+			}
+
+			$md_manager->output_template_data();
+		}
+
+		try
+		{
+			$updates_available = $phpbb_extension_manager->version_check($md_manager, $request->variable('versioncheck_force', false), false, $config['extension_force_unstable'] ? 'unstable' : null);
+
+			$template->assign_vars(array(
+				'S_UP_TO_DATE'   => empty($updates_available),
+				'S_VERSIONCHECK' => true,
+				'UP_TO_DATE_MSG' => $user->lang(empty($updates_available) ? 'UP_TO_DATE' : 'NOT_UP_TO_DATE', $md_manager->get_metadata('display-name')),
+			));
+
+			foreach ($updates_available as $branch => $version_data)
+			{
+				$template->assign_block_vars('updates_available', $version_data);
+			}
+		}
+		catch (\RuntimeException $e)
+		{
+			$template->assign_vars(array(
+				'S_VERSIONCHECK_STATUS'    => $e->getCode(),
+				'VERSIONCHECK_FAIL_REASON' => ($e->getMessage() !== $user->lang('VERSIONCHECK_FAIL')) ? $e->getMessage() : '',
+			));
 		}
 	}
 }
