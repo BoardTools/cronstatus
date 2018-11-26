@@ -12,7 +12,7 @@
 		"cron",
 		"status"
 	],
-	"license": "GPL-2.0",
+	"license": "GPL-2.0-only",
 	"authors": [
 		{
 			"name": "Igor Lavrov",
