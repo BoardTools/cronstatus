@@ -263,8 +263,7 @@ class cronstatus_module
 			$task_date = ($task_last_gc !== false) ? (int) $task_last_gc : -1;
 		}
 
-		$new_task_interval = ($task_date > 0) ? $this->helper->array_find($name . (($name != 'queue_interval') ? '_gc' : ''), $rows) : 0;
-		$new_task_date = ($new_task_interval > 0) ? $task_date + $new_task_interval : 0;
+		$new_task_date = $this->helper->get_new_task_date($rows, $task_date, $name);
 
 		/**
 		 * Event to modify task variables before displaying cron information

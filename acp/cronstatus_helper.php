@@ -123,4 +123,19 @@ class cronstatus_helper
 			));
 		}
 	}
+
+	/**
+	 * Calculates next time for Cron task execution
+	 *
+	 * @param array  $rows      Array with fetched parameters for Cron tasks
+	 * @param int    $task_date Microtime of last execution of current Cron task
+	 * @param string $name      Name of current Cron task
+	 * @return int
+	 */
+	public function get_new_task_date(array $rows, $task_date, $name)
+	{
+		$new_task_interval = ($task_date > 0) ? $this->array_find($name . (($name != 'queue_interval') ? '_gc' : ''), $rows) : 0;
+		$new_task_date = ($new_task_interval > 0) ? $task_date + $new_task_interval : 0;
+		return $new_task_date;
+	}
 }
