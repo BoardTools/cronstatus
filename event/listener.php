@@ -142,11 +142,11 @@ class listener implements EventSubscriberInterface
 		$prune = $this->db->sql_fetchrow($result);
 		$rows[] = array(
 			"config_name"  => "prune_forum_last_gc", // This is the time of the last Cron Job, not the time of pruned forums.
-			"config_value" => $prune['prune_next'] - $prune['prune_time'],
+			"config_value" => ($prune['prune_next'] ?? 0) - ($prune['prune_time'] ?? 0),
 		);
 		$rows[] = array(
 			"config_name"  => "prune_forum_gc",
-			"config_value" => $prune['prune_time'],
+			"config_value" => $prune['prune_time'] ?? 0,
 		);
 		$this->db->sql_freeresult($result);
 
@@ -155,11 +155,11 @@ class listener implements EventSubscriberInterface
 		$prune_shadow = $this->db->sql_fetchrow($result);
 		$rows[] = array(
 			"config_name"  => "prune_shadow_topics_last_gc", // This is the time of the last Cron Job, not the time of pruned shadow topics.
-			"config_value" => $prune_shadow['prune_shadow_next'] - $prune_shadow['prune_shadow_time'],
+			"config_value" => ($prune_shadow['prune_shadow_next'] ?? 0) - ($prune_shadow['prune_shadow_time'] ?? 0),
 		);
 		$rows[] = array(
 			"config_name"  => "prune_shadow_topics_gc",
-			"config_value" => $prune_shadow['prune_shadow_time'],
+			"config_value" => $prune_shadow['prune_shadow_time'] ?? 0,
 		);
 		$this->db->sql_freeresult($result);
 
